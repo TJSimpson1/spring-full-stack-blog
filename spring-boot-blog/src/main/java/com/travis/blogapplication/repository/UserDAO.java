@@ -8,4 +8,6 @@ import com.travis.blogapplication.model.User;
 @Repository
 public interface UserDAO extends JpaRepository<User, Long> {
 
+	User findFirstByEmail(String email);
+
 }
