@@ -24,15 +24,19 @@ public class WebSecurityConfig {
 	
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
-		return httpSecurity.csrf().disable()
-				.authorizeHttpRequests()
-				.requestMatchers("/register", "/authentication").permitAll()
-				.and()
-				.authorizeHttpRequests().requestMatchers("/api/**")
-				.authenticated().and()
-				.sessionManagement()
-				.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-				.and().build();
+		return httpSecurity.csrf(csrf -> csrf.disable())
+				.authorizeHttpRequests(auth -> auth
+//						.requestMatchers("/api/**").
+			            .requestMatchers("/api/register", "/api/auth/login").permitAll()
+			            .anyRequest().authenticated()
+			        )
+//				.authorizeHttpRequests()
+//				.requestMatchers("/register", "/authentication").permitAll()
+//				.and()
+//				.authorizeHttpRequests().requestMatchers("/api/**")
+//				.authenticated().and()
+				.sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+				.build();
 	}
 	
 	@Bean

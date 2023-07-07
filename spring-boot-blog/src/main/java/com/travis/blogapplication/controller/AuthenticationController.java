@@ -11,6 +11,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.travis.blogapplication.dto.AuthenticationRequest;
@@ -21,6 +22,7 @@ import com.travis.blogapplication.utils.JwtUtil;
 import jakarta.servlet.http.HttpServletResponse;
 
 @RestController
+@RequestMapping("/api/auth")
 public class AuthenticationController {
 	
 	@Autowired
@@ -32,14 +34,14 @@ public class AuthenticationController {
 	@Autowired
 	private JwtUtil jwtUtil;
 	
-	@PostMapping("/authentication")
+	@PostMapping("/login")
 	public AuthenticationResponse createAuthenticationToken(@RequestBody AuthenticationRequest authenticationRequest, HttpServletResponse response) throws BadCredentialsException, DisabledException, UsernameNotFoundException, IOException {
 		try {
 			authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authenticationRequest.getEmail(), authenticationRequest.getPassword()));
 		} catch (BadCredentialsException e) {
 			throw new BadCredentialsException("Incorrect username or password");
 		} catch (DisabledException disabledException) {
-			response.sendError(HttpServletResponse.SC_NOT_FOUND, "User is not created. Register user first.");
+			response.sendError(HttpServletResponse.SC_NOT_FOUND, "User does not exist. Register user first.");
 			return null;
 		}
 		final UserDetails userDetails = userDetailsService.loadUserByUsername(authenticationRequest.getEmail());
