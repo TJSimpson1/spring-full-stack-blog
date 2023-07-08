@@ -1,36 +1,17 @@
 import React, { useState } from 'react';
-import axios from 'axios';
+import { useLocalState } from '../hooks/useLocalStorage';
 
 const LoginPage = () => {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
 
-    const [jwt, setJwt] = useState("", "jwt");
+    const [jwt, setJwt] = useLocalState("", "jwt");
 
     const sendLoginRequest = () => {
         const reqBody = {
             email: username,
             password: password,      
         };
-    
-        // axios.post('http://localhost:8080/api/auth/login', {
-        //     username: username,
-        //     password: password
-        // })
-        // .then((res) => {
-        //     if(res.status === 200){
-        //         return Promise.all([res.json(), res.headers]);
-        //     } 
-        //     else {
-        //         return Promise.reject("Invalid login attempt");
-        //     }
-        // })
-        // .then(([body, headers]) => {
-        //         setJwt(headers.get("authorization"));
-        //         window.location.href = "home";
-        //     }).catch((message) => {
-        //         console.log(message);
-        //     });
 
         fetch("http://localhost:8080/api/auth/login" , {
             headers: {
@@ -39,20 +20,21 @@ const LoginPage = () => {
             method: "post",
             body: JSON.stringify(reqBody),
         })
-        .then((res) => {
-            if(res.status === 200){
-                return Promise.all([res.json(), res.headers]);
-            } 
-            else{
-                return Promise.reject("Invalid login attempt");
-            }
+        .then(res => {
+        if(res.status === 200){
+            return Promise.all([res.json(), res.headers]);
+        } 
+        else{
+            return Promise.reject("Invalid login attempt");
+        }})
+        .then(data => {
+            setJwt(data[0].jwt); 
         })
-        .then(([body, headers]) => {
-            setJwt(headers.get("authorization"));
+        .then(() => {
             window.location.href = "/";
         }).catch((message) => {
             console.log(message);
-        })
+        });
     }
 
     return(
