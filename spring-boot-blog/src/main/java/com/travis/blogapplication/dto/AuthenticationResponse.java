@@ -1,5 +1,5 @@
 package com.travis.blogapplication.dto;
 
-public record AuthenticationResponse(String jwtToken) {
+public record AuthenticationResponse(String jwt) {
 	
 }
