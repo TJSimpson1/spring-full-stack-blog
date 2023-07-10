@@ -13,7 +13,7 @@ import com.travis.blogapplication.dto.UserDTO;
 import com.travis.blogapplication.service.AuthService;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/auth")
 public class SignupUserController {
 	
 	@Autowired

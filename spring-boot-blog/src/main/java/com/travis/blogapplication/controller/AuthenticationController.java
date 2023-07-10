@@ -43,7 +43,7 @@ public class AuthenticationController {
 		} catch (BadCredentialsException e) {
 			throw new BadCredentialsException("Incorrect username or password");
 		} catch (DisabledException disabledException) {
-			response.sendError(HttpServletResponse.SC_NOT_FOUND, "User does not exist. Register user first.");
+			response.sendError(HttpServletResponse.SC_NOT_FOUND, "User account is not enabled. Validate user first.");
 			return null;
 		}
 		final UserDetails userDetails = userDetailsService.loadUserByUsername(authenticationRequest.getEmail());
