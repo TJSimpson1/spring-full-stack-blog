@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.travis.blogapplication.dto.AuthenticationResponse;
 import com.travis.blogapplication.dto.SignupRequest;
 import com.travis.blogapplication.dto.UserDTO;
 import com.travis.blogapplication.service.AuthService;
@@ -20,12 +21,12 @@ public class SignupUserController {
 	private AuthService authService;
 	
 	@PostMapping("/register")
-	public ResponseEntity<?> createUser(@RequestBody SignupRequest signupRequest) {
-		UserDTO createdUser = authService.createUser(signupRequest);
-		if(createdUser == null) {
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-		}
-		return new ResponseEntity<>(createdUser, HttpStatus.CREATED);
+	public ResponseEntity<AuthenticationResponse> createUser(@RequestBody SignupRequest signupRequest) {
+//		UserDTO createdUser = authService.createUser(signupRequest);
+//		if(createdUser == null) {
+//			return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+//		}
+		return ResponseEntity.ok(authService.createUser(signupRequest));
 	}
 
 }

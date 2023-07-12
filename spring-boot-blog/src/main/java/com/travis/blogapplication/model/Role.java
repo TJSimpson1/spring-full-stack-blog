@@ -31,14 +31,6 @@ public enum Role {
 	@Getter
 	private final Set<Permission> permissions;
 
-	public Set<Permission> getPermissions() {
-		return permissions;
-	}
-
-	Role(Set<Permission> permissions) {
-		this.permissions = permissions;
-	}
-
 	public List<SimpleGrantedAuthority> getAuthorities() {
 		var authorities = getPermissions().stream()
 				.map(permission -> new SimpleGrantedAuthority(permission.getPermission())).collect(Collectors.toList());

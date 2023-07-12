@@ -1,6 +1,6 @@
 package com.travis.blogapplication.service.jwt;
 
-import java.util.ArrayList;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -19,11 +19,11 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
 	@Override
 	public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-		User user = userRepository.findFirstByEmail(email);
-		if(user == null) {
+		Optional<User> user = userRepository.findFirstByEmail(email);
+		if(user.isEmpty()) {
 			throw new UsernameNotFoundException("User not found", null);
 		}
-		return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(), new ArrayList<>());
+		return user.get();
 	}
 
 }

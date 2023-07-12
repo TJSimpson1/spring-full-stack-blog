@@ -1,8 +1,5 @@
 package com.travis.blogapplication.dto;
 
-import java.util.List;
-
-import com.travis.blogapplication.model.Authority;
 import com.travis.blogapplication.model.Role;
 
 import lombok.Data;
@@ -19,6 +16,19 @@ public class SignupRequest {
 	private String email;
 	
 	private Role role;
+
+	public SignupRequest() {
+		super();
+	}
+
+	public SignupRequest(String name, String username, String password, String email, Role role) {
+		super();
+		this.name = name;
+		this.username = username;
+		this.password = password;
+		this.email = email;
+		this.role = role;
+	}
 
 	public String getName() {
 		return name;
