@@ -9,7 +9,7 @@ const LoginPage = () => {
 
     const sendLoginRequest = () => {
         const reqBody = {
-            email: username,
+            username: username,
             password: password,      
         };
 
