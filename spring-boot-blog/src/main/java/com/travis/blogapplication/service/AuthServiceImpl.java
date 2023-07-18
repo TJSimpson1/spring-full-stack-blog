@@ -33,7 +33,7 @@ public class AuthServiceImpl implements AuthService {
 		user.setUsername(signupRequest.getUsername());
 		//TODO sign in with email or username
 		user.setPassword(new BCryptPasswordEncoder().encode(signupRequest.getPassword()));
-		user.setRole(Role.USER);
+		user.setRole(signupRequest.getRole());
 		userRepository.save(user);
 		var jwtToken = jwtService.generateToken(user);
 		return AuthenticationResponse.builder().jwt(jwtToken).build();

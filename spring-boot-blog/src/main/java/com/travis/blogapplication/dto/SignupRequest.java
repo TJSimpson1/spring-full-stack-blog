@@ -2,9 +2,15 @@ package com.travis.blogapplication.dto;
 
 import com.travis.blogapplication.model.Role;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.NoArgsConstructor;
 import lombok.Data;
 
 @Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class SignupRequest {
 
 	private String name;
@@ -16,38 +22,5 @@ public class SignupRequest {
 	private String email;
 	
 	private Role role;
-
-	public SignupRequest() {
-		super();
-	}
-
-	public SignupRequest(String name, String username, String password, String email, Role role) {
-		super();
-		this.name = name;
-		this.username = username;
-		this.password = password;
-		this.email = email;
-		this.role = role;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public String getUsername() {
-		return username;
-	}
-
-	public String getPassword() {
-		return password;
-	}
-
-	public String getEmail() {
-		return email;
-	}
-
-	public Role getRole() {
-		return role;
-	}
 
 }
