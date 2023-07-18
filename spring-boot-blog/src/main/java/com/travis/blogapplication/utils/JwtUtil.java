@@ -1,13 +1,11 @@
 package com.travis.blogapplication.utils;
 
 import java.security.Key;
-import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
@@ -65,16 +63,5 @@ public class JwtUtil {
 		byte[] keyBytes = Decoders.BASE64.decode(SECRET);
 		return Keys.hmacShaKeyFor(keyBytes);
 	}
-
-//    private String getRoleFromUser(UserDetails user) {
-//        // Retrieve the role information from the UserDetails object
-//        Collection<? extends GrantedAuthority> authorities = user.getAuthorities();
-//        for (GrantedAuthority authority : authorities) {
-//            if (!authority.getAuthority().startsWith("ROLE_")) {
-//                return authority.getAuthority();
-//            }
-//        }
-//        return null; // Return null if no role is found
-//    }
 
 }

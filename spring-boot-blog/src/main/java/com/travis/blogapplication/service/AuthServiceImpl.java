@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 import com.travis.blogapplication.dto.AuthenticationRequest;
 import com.travis.blogapplication.dto.AuthenticationResponse;
 import com.travis.blogapplication.dto.SignupRequest;
-import com.travis.blogapplication.model.Role;
 import com.travis.blogapplication.model.User;
 import com.travis.blogapplication.repository.UserDAO;
 import com.travis.blogapplication.utils.JwtUtil;
