@@ -1,5 +1,78 @@
-.nav-right {
+.nav-button {
   position: absolute;
   top: 8px;
   right: 8px;
 }
+
+.navbar ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  background-color: rgb(220, 220, 220);
+  display: flex;
+}
+
+.navbar li {
+  margin: 0 10px;
+}
+
+.navbar li a {
+  display: block;
+  padding: 10px;
+  text-decoration: none;
+  color: #333;
+}
+
+.navbar li a:hover {
+  background-color: #ddd;
+}
+
+.navbar li.active a {
+  background-color: #ffffff;
+}
+
+.footer {
+  background-color: #f2f2f2;
+  padding: 40px 0;
+  color: #666;
+}
+
+.footer-content {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.footer-column {
+  width: 30%;
+  margin-bottom: 30px;
+}
+
+.footer-column h4 {
+  margin-bottom: 15px;
+}
+
+.social-media a {
+  color: #666;
+  font-size: 20px;
+  margin-right: 10px;
+  transition: color 0.3s ease;
+}
+
+.social-media a:hover {
+  color: #000;
+}
+
+.footer-bottom {
+  text-align: center;
+  margin-top: 30px;
+}
+
+.footer-bottom p {
+  margin: 0;
+}
+
+/* Assuming you are using Font Awesome for icons */
+@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css');
