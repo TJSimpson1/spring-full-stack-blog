@@ -1,6 +1,7 @@
 package com.travis.blogapplication.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -24,7 +25,12 @@ public class SignupUserController {
 //		if(createdUser == null) {
 //			return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
 //		}
-		return ResponseEntity.ok(authService.createUser(signupRequest));
+		try {
+			return ResponseEntity.ok(authService.createUser(signupRequest));
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+		}
+		
 	}
 
 }

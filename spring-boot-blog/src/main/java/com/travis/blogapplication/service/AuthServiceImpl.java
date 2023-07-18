@@ -27,13 +27,17 @@ public class AuthServiceImpl implements AuthService {
 
 	@Override
 	public AuthenticationResponse createUser(SignupRequest signupRequest) {
+		if (userRepository.findFirstByUsername(signupRequest.getUsername()).isPresent()) {
+	        throw new IllegalArgumentException("Username already exists");
+	    }
 		User user = new User();
 		user.setEmail(signupRequest.getEmail());
 		user.setName(signupRequest.getName());
 		user.setUsername(signupRequest.getUsername());
-		//TODO sign in with email or username
+		//TODO: sign in with email or username
 		user.setPassword(new BCryptPasswordEncoder().encode(signupRequest.getPassword()));
 		user.setRole(signupRequest.getRole());
+		//TODO: make role just "USER" 
 		userRepository.save(user);
 		var jwtToken = jwtService.generateToken(user);
 		return AuthenticationResponse.builder().jwt(jwtToken).build();
