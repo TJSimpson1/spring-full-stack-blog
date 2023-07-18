@@ -1,7 +1,14 @@
 import { Link, useNavigate } from "react-router-dom";
+import { useLocalState } from "./hooks/useLocalStorage";
 
 const NavBar = () => {
     const navigate = useNavigate();
+    const [jwt, setJwt] = useLocalState("", "jwt");
+    const logout = () => {
+        localStorage.removeItem("jwt");
+        setJwt("");
+        navigate('/');
+    }
     return(
         <nav>
             <ul>
@@ -13,7 +20,7 @@ const NavBar = () => {
                 </li>
             </ul>
             <div className="nav-right">
-                <button onClick={() => navigate('/login')}>Log in</button>
+                {jwt === "" ? <button onClick={() => navigate('/login')}>Log in</button> : <button onClick={() => logout()}>Log out</button>}
             </div>
         </nav>
     )
