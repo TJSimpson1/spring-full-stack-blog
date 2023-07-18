@@ -1,5 +1,7 @@
 package com.travis.blogapplication.dto;
 
+import com.travis.blogapplication.model.Role;
+
 import lombok.Data;
 
 @Data
@@ -14,6 +16,8 @@ public class UserDTO {
 	private String password;
 
 	private String email;
+	
+	private Role role;
 
 	public Long getId() {
 		return id;
@@ -55,6 +59,11 @@ public class UserDTO {
 		this.email = email;
 	}
 
-	
-	
+	public Role getRole() {
+		return role;
+	}
+
+	public void setRole(Role role) {
+		this.role = role;
+	}	
 }
