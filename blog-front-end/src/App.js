@@ -5,6 +5,10 @@ import HomePage from './pages/HomePage';
 import AboutPage from './pages/AboutPage';
 import LoginPage from './pages/LoginPage';
 import Footer from './Footer';
+import AdminRoute from './routes/AdminRoute';
+import AdminPage from './pages/AdminPage';
+import ForbiddenPage from './pages/Forbidden';
+import PageNotFoundPage from './pages/PageNotFound';
 
 function App() {
   return (
@@ -16,6 +20,11 @@ function App() {
               <Route path="/" element={<HomePage />} />
               <Route path="/about" element={<AboutPage />} />
               <Route path="/login" element={<LoginPage />} />
+              <Route path="/admin" element={<AdminRoute >
+                                                              <AdminPage />
+                                                        </AdminRoute>} />
+              <Route path="/forbidden" element={<ForbiddenPage />} />
+              <Route path='*' element={<PageNotFoundPage />} />
             </Routes>
           </div>
           <Footer />
