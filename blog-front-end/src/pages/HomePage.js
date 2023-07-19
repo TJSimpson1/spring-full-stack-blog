@@ -1,9 +1,16 @@
+import LoadingSpinner from "../components/LoadingSpinner";
 import { useLocalState } from "../hooks/useLocalStorage";
 import { useUser } from "../hooks/useUser";
 
 const HomePage = () => {
     const [jwt, setJwt] = useLocalState("", "jwt");
-    const user = useUser();
+    const { user, isLoading } = useUser();
+
+    if (isLoading) {
+        // Render a loading indicator while user data is being fetched
+        return <LoadingSpinner />;
+      }
+
     return (
         <>
         <h1>Welcome to the home page {user?.username}</h1>

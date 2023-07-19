@@ -1,13 +1,14 @@
 import React from "react";
-import { Route, Navigate } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 import { useUser } from "../hooks/useUser";
+import LoadingSpinner from "../components/LoadingSpinner";
 
 const AdminRoute = ({ children }) => {
   const { user, isLoading } = useUser();
 
   if (isLoading) {
-    // Render a loading indicator or skeleton screen while user data is being fetched
-    return <div>Loading...</div>;
+    // Render a loading indicator while user data is being fetched
+    return <LoadingSpinner />;
   }
 
   if(!user){
