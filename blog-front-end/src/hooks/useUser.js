@@ -10,8 +10,13 @@ export function useUser() {
 
   useEffect(() => {
     if (token && username) {
+      console.log(token.replace(/"/g, ''));
       axios
-        .get(`http://localhost:8080/api/users/${username}`)
+        .get(`http://localhost:8080/api/users/${username}`, {
+          headers: {
+            Authorization: `Bearer ${token.replace(/"/g, '')}`
+          }
+        })
         .then(response => {
           setUser(response.data);
           setIsLoading(false);
