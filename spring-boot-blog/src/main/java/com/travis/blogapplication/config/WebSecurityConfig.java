@@ -42,6 +42,7 @@ public class WebSecurityConfig {
 		return httpSecurity.csrf(csrf -> csrf.disable()).authorizeHttpRequests(auth -> auth
 //						.requestMatchers("/api/**").permitAll()
 				.requestMatchers("/api/auth/**").permitAll()
+				.requestMatchers("/api/users/**").permitAll()
 				.requestMatchers("/api/management/**")
 				.hasAnyRole(ADMIN.name(), MANAGER.name())
 				.requestMatchers(GET, "/api/management/**")
