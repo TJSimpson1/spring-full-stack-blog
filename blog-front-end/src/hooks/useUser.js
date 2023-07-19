@@ -6,7 +6,6 @@ export function useUser() {
   const [user, setUser] = useState(null);
   const token = localStorage.getItem('jwt');
   const username = decodeToken(token)?.sub;
-  console.log(user);
 
   useEffect(() => {
     if (token && username) {
