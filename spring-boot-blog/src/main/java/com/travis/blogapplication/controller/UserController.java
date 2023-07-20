@@ -3,7 +3,11 @@ package com.travis.blogapplication.controller;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,14 +26,20 @@ public class UserController {
 	private UserService userService;
 	
 	@GetMapping("/{username}")
-	public ResponseEntity<User> getUserByUserame(@PathVariable("username") String username){
-		Optional<User> user = userService.findUserByUsername(username);
-		if(user.isPresent()) {
-			return ResponseEntity.ok(user.get());
-		}
-		return ResponseEntity.notFound().build();
+	public ResponseEntity<User> getUserByUsername(@PathVariable("username") String username) {
+	    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+	    if (authentication != null && authentication.isAuthenticated()) {
+	        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+	        if (username.equals(userDetails.getUsername())) {
+	            Optional<User> user = userService.findUserByUsername(username);
+	            if (user.isPresent()) {
+	                return ResponseEntity.ok(user.get());
+	            }
+	            return ResponseEntity.notFound().build();
+	        }
+	    }
+	    return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
 	}
-
 	
 	@GetMapping("/{username}/role")
 	public ResponseEntity<String> getUserRoleByUsername(@PathVariable String username){
