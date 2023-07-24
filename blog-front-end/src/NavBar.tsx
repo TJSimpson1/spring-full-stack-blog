@@ -1,3 +1,4 @@
+import React from "react";
 import { Link, useLocation } from "react-router-dom";
 import { useLocalState } from "./hooks/useLocalStorage";
 import { useState, useEffect } from "react";
@@ -7,7 +8,7 @@ const NavBar = () => {
   const [jwt, setJwt] = useLocalState("", "jwt");
   const location = useLocation();
 
-  const handleNavigation = (page) => {
+  const handleNavigation = (page: string) => {
     setActivePage(page);
   };
 
