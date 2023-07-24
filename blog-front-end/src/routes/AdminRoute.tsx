@@ -1,10 +1,14 @@
-import React from "react";
+import React, { FC, ReactNode } from "react";
 import { Navigate } from "react-router-dom";
 import { useUser } from "../hooks/useUser";
 import LoadingSpinner from "../components/LoadingSpinner";
 
-const AdminRoute = ({ children }) => {
-  const { user, isLoading } = useUser();
+interface AdminRouteProps {
+  children: ReactNode;
+}
+
+const AdminRoute: FC<AdminRouteProps> = ({ children } ) => {
+  const { user, isLoading }: any = useUser();
 
   if (isLoading) {
     // Render a loading indicator while user data is being fetched
@@ -19,7 +23,7 @@ const AdminRoute = ({ children }) => {
     return <Navigate to="/forbidden" />
   }
 
-  return children;
+  return <>{children}</>;
 };
 
 export default AdminRoute;

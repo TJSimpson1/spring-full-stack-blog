@@ -1,3 +1,5 @@
+import React from "react";
+
 const AboutPage = () => (
     <>
     <h1>Welcome to the about page</h1>
