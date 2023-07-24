@@ -6,11 +6,11 @@ export function useUser() {
   const [user, setUser] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const token = localStorage.getItem('jwt');
-  const username = decodeToken(token)?.sub;
+  const decodedToken: any = decodeToken(token);
+  const username = decodedToken?.sub;
 
   useEffect(() => {
     if (token && username) {
-      console.log(token.replace(/"/g, ''));
       axios
         .get(`http://localhost:8080/api/users/${username}`, {
           headers: {
