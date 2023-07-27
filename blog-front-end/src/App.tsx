@@ -10,6 +10,7 @@ import AdminRoute from './routes/AdminRoute';
 import AdminPage from './pages/AdminPage';
 import ForbiddenPage from './pages/Forbidden';
 import PageNotFoundPage from './pages/PageNotFound';
+import ArticlesListPage from './pages/ArticlesListPage';
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
             <Routes>
               <Route path="/" element={<HomePage />} />
               <Route path="/about" element={<AboutPage />} />
+              <Route path="/articles" element={<ArticlesListPage />} />
               <Route path="/login" element={<LoginPage />} />
               <Route path="/admin" element={<AdminRoute >
                                                               <AdminPage />
