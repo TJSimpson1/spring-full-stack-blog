@@ -36,6 +36,11 @@ const NavBar = () => {
             About
           </Link>
         </li>
+        <li className={activePage === "articles" ? "active" : ""}>
+          <Link to="/articles" onClick={() => handleNavigation("articles")}>
+            Articles
+          </Link>
+        </li>
         <li className={activePage === "login" ? "active nav-right" : "nav-right"}>
           {jwt === "" ? (
             <Link to="/login" onClick={() => handleNavigation("login")}>
