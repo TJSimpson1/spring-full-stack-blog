@@ -10,4 +10,6 @@ public interface AuthService {
 	
 	AuthenticationResponse authenticate(AuthenticationRequest request);
 
+	AuthenticationResponse createAuthor(SignupRequest signupRequest);
+
 }

@@ -32,5 +32,14 @@ public class SignupUserController {
 		}
 		
 	}
+	
+	@PostMapping("/register/author")
+	public ResponseEntity<AuthenticationResponse> createAuthor(@RequestBody SignupRequest signupRequest){
+		try {
+			return ResponseEntity.ok(authService.createAuthor(signupRequest));
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+		}
+	}
 
 }

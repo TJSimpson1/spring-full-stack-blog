@@ -40,8 +40,8 @@ public class WebSecurityConfig {
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
 		return httpSecurity.csrf(csrf -> csrf.disable()).authorizeHttpRequests(auth -> auth
-//						.requestMatchers("/api/**").permitAll()
 				.requestMatchers("/api/auth/**").permitAll()
+				.requestMatchers("/api/articles/**").permitAll()
 				.requestMatchers("/api/users/**").permitAll()
 				.requestMatchers("/api/management/**")
 				.hasAnyRole(ADMIN.name(), MANAGER.name())
