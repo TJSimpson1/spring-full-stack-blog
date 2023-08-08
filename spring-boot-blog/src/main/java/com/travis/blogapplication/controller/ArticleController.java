@@ -36,11 +36,11 @@ public class ArticleController {
     }
 
     // Read an article by ID
-//    @GetMapping("/{id}")
-//    public ResponseEntity<Article> getArticleById(@PathVariable Long id) {
-//        Optional<Article> article = articleService.getArticleById(id);
-//        return article.map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
-//    }
+    @GetMapping("/{id}")
+    public ResponseEntity<Article> getArticleById(@PathVariable Long id) {
+        Optional<Article> article = articleService.getArticleById(id);
+        return article.map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
+    }
 
     // Read all articles
     @GetMapping

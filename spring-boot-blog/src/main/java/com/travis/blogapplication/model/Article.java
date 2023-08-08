@@ -28,6 +28,7 @@ public class Article {
 	private String title;
 	
 	@Lob
+	@Column(length = 10000)
 	private List<String> content;
 	
 	@ManyToOne
