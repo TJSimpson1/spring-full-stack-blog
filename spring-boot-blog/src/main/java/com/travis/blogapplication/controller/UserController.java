@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.travis.blogapplication.dto.UserDTO;
-import com.travis.blogapplication.model.User;
 import com.travis.blogapplication.service.UserService;
 
 @RestController
@@ -42,18 +41,6 @@ public class UserController {
 		} 
 		return ResponseEntity.notFound().build();
 		
-	}
-	
-	@GetMapping("/authors/{username}")
-	@PreAuthorize("isAuthenticated() and (#username == authentication.principal.username or hasRole('ADMIN'))")
-	public ResponseEntity<UserDTO> getAuthorByUsername(@PathVariable("username") String username) {
-	    Optional<UserDTO> authorDTO = userService.getAuthorByUsername(username);
-	    
-	    if (authorDTO.isPresent()) {
-	        return ResponseEntity.ok(authorDTO.get());
-	    }
-	    
-	    return ResponseEntity.notFound().build();
 	}
 	
 	

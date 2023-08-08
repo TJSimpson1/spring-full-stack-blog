@@ -2,19 +2,16 @@ package com.travis.blogapplication.service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.travis.blogapplication.dto.ArticleDTO;
 import com.travis.blogapplication.model.Article;
-import com.travis.blogapplication.model.Author;
 import com.travis.blogapplication.repository.ArticleRepository;
-import com.travis.blogapplication.repository.AuthorRepository;
 
-import jakarta.transaction.Transactional;
 
 @Service
 public class ArticleService {
@@ -22,10 +19,7 @@ public class ArticleService {
     @Autowired
     private ArticleRepository articleRepository;
     
-    @Autowired
-    private AuthorRepository authorRepository;
-    
-    private ArticleDTO convertToDTO(Article article) {
+    public ArticleDTO convertToDTO(Article article) {
         ArticleDTO articleDTO = new ArticleDTO();
         articleDTO.setId(article.getId());
         articleDTO.setName(article.getName());
@@ -40,18 +34,7 @@ public class ArticleService {
     	if (articleRepository.existsByName(article.getName())) {
             throw new IllegalArgumentException("Article with the same name already exists.");
         }
-    	Article savedArticle = articleRepository.save(article);
-
-        // Update the author's list of articles
-        Optional<Author> author = authorRepository.findById(savedArticle.getAuthor().getId());
-        if(author.isEmpty()) {
-        	throw new NoSuchElementException("Author not found for article ID: " + savedArticle.getId());
-        }
-        Author authorEntity = author.get();
-        authorEntity.getArticles().add(savedArticle);
-        authorRepository.save(authorEntity);
-
-        return savedArticle;
+    	return articleRepository.save(article);
     }
 
     

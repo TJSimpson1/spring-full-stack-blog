@@ -2,8 +2,6 @@ package com.travis.blogapplication.model;
 
 import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -34,5 +32,5 @@ public class Article {
 	
 	@ManyToOne
 	@JoinColumn(name = "author_id")
-	private Author author;
+	private User author;
 }
