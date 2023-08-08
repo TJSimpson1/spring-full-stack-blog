@@ -10,7 +10,6 @@ const ArticlesListPage = () => {
   useEffect(() => {
     const fetchArticles = async () => {
       try {
-        await new Promise((resolve) => setTimeout(resolve, 5000));
         const response = await axios.get("http://localhost:8080/api/articles");
         setArticles(response.data);
         setIsLoading(false);
