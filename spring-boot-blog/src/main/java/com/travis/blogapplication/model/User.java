@@ -13,15 +13,12 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.Inheritance;
-import jakarta.persistence.InheritanceType;
 import jakarta.persistence.Table;
 import lombok.Data;
 
 @Entity
 @Table(name = "users")
 @Data
-@Inheritance(strategy = InheritanceType.JOINED)
 public class User implements UserDetails {
 
 	private static final long serialVersionUID = 3767785431644986550L;
