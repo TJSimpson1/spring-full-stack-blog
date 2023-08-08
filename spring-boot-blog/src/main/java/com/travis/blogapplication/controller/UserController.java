@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.travis.blogapplication.model.User;
+import com.travis.blogapplication.dto.UserDTO;
 import com.travis.blogapplication.service.UserService;
 
 @RestController
@@ -24,8 +24,8 @@ public class UserController {
 	
 	@GetMapping("/{username}")
     @PreAuthorize("isAuthenticated() and (#username == authentication.principal.username or hasRole('ADMIN'))")
-    public ResponseEntity<User> getUserByUsername(@PathVariable("username") String username) {
-        Optional<User> user = userService.findUserByUsername(username);
+    public ResponseEntity<UserDTO> getUserByUsername(@PathVariable("username") String username) {
+        Optional<UserDTO> user = userService.findUserByUsername(username);
         if (user.isPresent()) {
             return ResponseEntity.ok(user.get());
         }
@@ -34,7 +34,7 @@ public class UserController {
 	
 	@GetMapping("/{username}/role")
 	public ResponseEntity<String> getUserRoleByUsername(@PathVariable String username){
-		Optional<User> user = userService.findUserByUsername(username);
+		Optional<UserDTO> user = userService.findUserByUsername(username);
 		if(user.isPresent()) {
 			String role = user.get().getRole().name();
 			return ResponseEntity.ok(role);

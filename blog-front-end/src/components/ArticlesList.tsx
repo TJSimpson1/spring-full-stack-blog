@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import styled from "styled-components";
 
 interface Article {
+  id: number;
   name: string;
   title: string;
   content: string[];
@@ -31,7 +32,7 @@ const ArticlesList: React.FC<ArticlesListProps> = ({ articles }) => {
   return (
     <ArticleContainer>
      {articles.map(article => (
-            <StyledLink key={article.name} to={`/article/${article.name}`}>
+            <StyledLink key={article.name} to={`/article/${article.id}`}>
                 <h3>{article.title}</h3>
                 <p>{article.content[0].substring(0, 150)}...</p>
             </StyledLink>

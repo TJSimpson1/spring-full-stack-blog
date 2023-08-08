@@ -21,10 +21,6 @@ public class SignupUserController {
 	
 	@PostMapping("/register")
 	public ResponseEntity<AuthenticationResponse> createUser(@RequestBody SignupRequest signupRequest) {
-//		UserDTO createdUser = authService.createUser(signupRequest);
-//		if(createdUser == null) {
-//			return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-//		}
 		try {
 			return ResponseEntity.ok(authService.createUser(signupRequest));
 		} catch (Exception e) {
