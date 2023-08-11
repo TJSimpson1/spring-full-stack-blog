@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -68,8 +69,9 @@ public class ArticleController {
     }
 
     // Delete an article by ID
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteArticle(@PathVariable Long id) {
+    @DeleteMapping("/{id}/author/{username}")
+    @PreAuthorize("isAuthenticated() and (#username == authentication.principal.username or hasRole('ADMIN'))")
+    public ResponseEntity<Void> deleteArticle(@PathVariable Long id, @PathVariable String username) {
         boolean deleted = articleService.deleteArticle(id);
         if (deleted) {
             return ResponseEntity.noContent().build();

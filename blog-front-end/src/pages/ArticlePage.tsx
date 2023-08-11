@@ -55,7 +55,11 @@ const ArticlePage: React.FC = () => {
   }, [articleId]);
 
   const deleteArticle = () => {
-    axios.delete(`http://localhost:8080/api/articles/${articleId}`)
+    axios.delete(`http://localhost:8080/api/articles/${articleId}/author/${user?.username}`, {
+      headers: {
+        Authorization: `Bearer ${jwt.replace(/"/g, "")}`,
+      },
+    })
     .then(() => {navigate("/articles")})
     .catch(error => {
       console.error("Failed to delete article", error);
