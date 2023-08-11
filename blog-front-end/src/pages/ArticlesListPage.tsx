@@ -12,29 +12,9 @@ const ArticlesListPage = () => {
   const [articlesLoading, setArticlesLoading] = useState<boolean>(true);
   const { user, isLoading }: { user: User | null; isLoading: boolean } =
     useUser();
-  const [userRole, setUserRole] = useState("");
-  const [jwt, setJwt] = useLocalState("", "jwt");
 
   useEffect(() => {
-    const getUserRole = async () => {
-      if (user) {
-        await axios
-          .get(`http://localhost:8080/api/users/${user.username}/role`, {
-            headers: {
-              Authorization: `Bearer ${jwt.replace(/"/g, "")}`,
-            },
-          })
-          .then((response) => {
-            setUserRole(response.data);
-          })
-          .catch((error) => {
-            console.error("Failed to fetch user's role", error);
-          });
-      }
-    };
-
     fetchArticles();
-    getUserRole();
   }, [isLoading]);
 
   const fetchArticles = async () => {
@@ -49,7 +29,7 @@ const ArticlesListPage = () => {
   };
 
   const showMyArticles = () => {
-    setArticles(articles.filter((article) => article.author.id === user?.id));
+    setArticles(articles.filter((article) => article.author?.id === user?.id));
   };
 
   return (
@@ -59,7 +39,7 @@ const ArticlesListPage = () => {
       ) : (
         <div>
           <h1>Articles</h1>
-          {user && userRole === "AUTHOR" && (
+          {user && user.role === "AUTHOR" && (
             <div>
               <button onClick={showMyArticles}>Show my articles</button>
               <button onClick={fetchArticles}>Show all articles</button>

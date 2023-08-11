@@ -4,28 +4,28 @@ import { useUser } from "../hooks/useUser";
 import LoadingSpinner from "../components/LoadingSpinner";
 import { User } from "../interfaces/User";
 
-interface AdminRouteProps {
+interface AuthorRouteProps {
   children: ReactNode;
 }
 
-const AdminRoute: FC<AdminRouteProps> = ({ children } ) => {
-  const { user, isLoading }: { user: User | null; isLoading: boolean } =
-  useUser();
+const AuthorRoute: FC<AuthorRouteProps> = ({ children }) => {
+    const { user, isLoading }: { user: User | null; isLoading: boolean } =
+    useUser();
 
   if (isLoading) {
     // Render a loading indicator while user data is being fetched
     return <LoadingSpinner />;
   }
 
-  if(!user){
+  if (!user) {
     return <Navigate to="/login" />;
   }
 
-  if(user?.role !== "ADMIN") {
-    return <Navigate to="/forbidden" />
+  if (user?.role === "ADMIN" || user?.role === "AUTHOR") {
+    return <>{children}</>;
   }
 
-  return <>{children}</>;
+  return <Navigate to="/forbidden" />;
 };
 
-export default AdminRoute;
+export default AuthorRoute;

@@ -74,8 +74,8 @@ const ArticlePage: React.FC = () => {
         article && (
           <div className="article">
             <h1>{article.title}</h1>
-            <p>Author: {article.author.name}</p>
-            {user && (userRole === "ADMIN" || (userRole === "AUTHOR" && user.id === article.author.id)) && <div><button onClick={deleteArticle}>Delete article</button></div>}
+            <p>Author: {article.author?.name}</p>
+            {user && (userRole === "ADMIN" || (userRole === "AUTHOR" && user.id === article.author?.id)) && <div><button onClick={deleteArticle}>Delete article</button></div>}
             {article.content.map((paragraph, i) => (
               <p key={i}>{paragraph}</p>
             ))}

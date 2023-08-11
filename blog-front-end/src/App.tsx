@@ -7,11 +7,13 @@ import AboutPage from './pages/AboutPage';
 import LoginPage from './pages/LoginPage';
 import Footer from './Footer';
 import AdminRoute from './routes/AdminRoute';
+import AuthorRoute from './routes/AuthorRoute';
 import AdminPage from './pages/AdminPage';
 import ForbiddenPage from './pages/Forbidden';
 import PageNotFoundPage from './pages/PageNotFound';
 import ArticlesListPage from './pages/ArticlesListPage';
 import ArticlePage from './pages/ArticlePage';
+import CreateArticlePage from './pages/CreateArticlePage';
 
 function App() {
   return (
@@ -28,6 +30,9 @@ function App() {
               <Route path="/admin" element={<AdminRoute >
                                                               <AdminPage />
                                                         </AdminRoute>} />
+              <Route path='/create-article' element={<AuthorRoute>
+                                                      <CreateArticlePage />
+                                                    </AuthorRoute>} />
               <Route path="/forbidden" element={<ForbiddenPage />} />
               <Route path='*' element={<PageNotFoundPage />} />
             </Routes>
