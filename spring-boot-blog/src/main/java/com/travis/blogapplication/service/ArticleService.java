@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.travis.blogapplication.dto.ArticleDTO;
 import com.travis.blogapplication.model.Article;
+import com.travis.blogapplication.model.User;
 import com.travis.blogapplication.repository.ArticleRepository;
 
 
@@ -25,7 +26,7 @@ public class ArticleService {
         articleDTO.setName(article.getName());
         articleDTO.setTitle(article.getTitle());
         articleDTO.setContent(article.getContent());
-        articleDTO.setAuthorId(article.getAuthor().getId());
+        articleDTO.setAuthor(article.getAuthor());
         return articleDTO;
     }
 
@@ -78,4 +79,8 @@ public class ArticleService {
         }
         return false; // Article not found
     }
+
+	public List<Article> getArticlesByAuthor(User author) {
+		return articleRepository.getArticlesByAuthor(author);
+	}
 }

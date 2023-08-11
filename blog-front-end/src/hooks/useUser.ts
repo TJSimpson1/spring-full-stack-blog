@@ -1,11 +1,12 @@
-import axios from 'axios';
-import { useEffect, useState } from 'react';
-import decodeToken from '../util/decodeJwt';
+import axios from "axios";
+import { useEffect, useState } from "react";
+import decodeToken from "../util/decodeJwt";
+import { User } from "../interfaces/User";
 
 export function useUser() {
-  const [user, setUser] = useState(null);
-  const [isLoading, setIsLoading] = useState(true);
-  const token = localStorage.getItem('jwt');
+  const [user, setUser] = useState<User | null>(null);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const token = localStorage.getItem("jwt");
   const decodedToken: any = decodeToken(token);
   const username = decodedToken?.sub;
 
@@ -14,15 +15,15 @@ export function useUser() {
       axios
         .get(`http://localhost:8080/api/users/${username}`, {
           headers: {
-            Authorization: `Bearer ${token.replace(/"/g, '')}`
-          }
+            Authorization: `Bearer ${token.replace(/"/g, "")}`,
+          },
         })
-        .then(response => {
+        .then((response) => {
           setUser(response.data);
           setIsLoading(false);
         })
-        .catch(error => {
-          console.error('Failed to fetch user details:', error);
+        .catch((error) => {
+          console.error("Failed to fetch user details:", error);
           setUser(null);
           setIsLoading(false);
         });

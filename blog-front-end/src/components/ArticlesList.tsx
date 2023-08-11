@@ -1,13 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
-
-interface Article {
-  id: number;
-  name: string;
-  title: string;
-  content: string[];
-}
+import { Article } from "../interfaces/Article";
 
 interface ArticlesListProps {
   articles: Article[];
@@ -34,6 +28,7 @@ const ArticlesList: React.FC<ArticlesListProps> = ({ articles }) => {
      {articles.map(article => (
             <StyledLink key={article.name} to={`/article/${article.id}`}>
                 <h3>{article.title}</h3>
+                {article.author && <h6>By {article.author.name}</h6>}
                 <p>{article.content[0].substring(0, 150)}...</p>
             </StyledLink>
         ))}

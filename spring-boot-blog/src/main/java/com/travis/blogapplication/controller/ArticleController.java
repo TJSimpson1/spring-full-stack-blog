@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.travis.blogapplication.dto.ArticleDTO;
 import com.travis.blogapplication.model.Article;
+import com.travis.blogapplication.model.User;
 import com.travis.blogapplication.service.ArticleService;
 
 @RestController
@@ -41,6 +43,12 @@ public class ArticleController {
         Optional<Article> article = articleService.getArticleById(id);
         return article.map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
     }
+    
+    @GetMapping("/author")
+    public ResponseEntity<List<Article>> getArticleByAuthor(@RequestBody User author){
+    	List<Article> articles = articleService.getArticlesByAuthor(author);
+    	return ResponseEntity.ok(articles);
+    }
 
     // Read all articles
     @GetMapping
@@ -61,8 +69,9 @@ public class ArticleController {
     }
 
     // Delete an article by ID
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteArticle(@PathVariable Long id) {
+    @DeleteMapping("/{id}/author/{username}")
+    @PreAuthorize("isAuthenticated() and (#username == authentication.principal.username or hasRole('ADMIN'))")
+    public ResponseEntity<Void> deleteArticle(@PathVariable Long id, @PathVariable String username) {
         boolean deleted = articleService.deleteArticle(id);
         if (deleted) {
             return ResponseEntity.noContent().build();
