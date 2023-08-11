@@ -2,9 +2,10 @@ import React, { useEffect, useState } from "react";
 import ArticlesList from "../components/ArticlesList";
 import axios from "axios";
 import LoadingSpinner from "../components/LoadingSpinner";
+import { Article } from "../interfaces/Article";
 
 const ArticlesListPage = () => {
-  const [articles, setArticles] = useState([]);
+  const [articles, setArticles] = useState<Article[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
   useEffect(() => {
@@ -21,6 +22,8 @@ const ArticlesListPage = () => {
 
     fetchArticles();
   }, []);
+
+  console.log(articles)
 
   return (
     <div>

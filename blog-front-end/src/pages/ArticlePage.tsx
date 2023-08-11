@@ -2,16 +2,7 @@ import axios from "axios";
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import LoadingSpinner from "../components/LoadingSpinner";
-
-interface Article {
-  id: number;
-  name: string;
-  title: string;
-  content: string[];
-  author: {
-    name: string;
-  };
-}
+import { Article } from "../interfaces/Article";
 
 const ArticlePage: React.FC = () => {
   const { articleId } = useParams<{ articleId: string }>();

@@ -25,7 +25,7 @@ public class ArticleService {
         articleDTO.setName(article.getName());
         articleDTO.setTitle(article.getTitle());
         articleDTO.setContent(article.getContent());
-        articleDTO.setAuthorId(article.getAuthor().getId());
+        articleDTO.setAuthor(article.getAuthor());
         return articleDTO;
     }
 
