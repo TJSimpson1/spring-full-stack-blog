@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.travis.blogapplication.dto.ArticleDTO;
 import com.travis.blogapplication.model.Article;
+import com.travis.blogapplication.model.User;
 import com.travis.blogapplication.service.ArticleService;
 
 @RestController
@@ -40,6 +41,12 @@ public class ArticleController {
     public ResponseEntity<Article> getArticleById(@PathVariable Long id) {
         Optional<Article> article = articleService.getArticleById(id);
         return article.map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
+    }
+    
+    @GetMapping("/author")
+    public ResponseEntity<List<Article>> getArticleByAuthor(@RequestBody User author){
+    	List<Article> articles = articleService.getArticlesByAuthor(author);
+    	return ResponseEntity.ok(articles);
     }
 
     // Read all articles
