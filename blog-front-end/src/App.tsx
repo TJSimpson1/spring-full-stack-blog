@@ -30,7 +30,7 @@ function App() {
               <Route path="/admin" element={<AdminRoute >
                                                               <AdminPage />
                                                         </AdminRoute>} />
-              <Route path='/create-article' element={<AuthorRoute>
+              <Route path='/articles/create-article' element={<AuthorRoute>
                                                       <CreateArticlePage />
                                                     </AuthorRoute>} />
               <Route path="/forbidden" element={<ForbiddenPage />} />
