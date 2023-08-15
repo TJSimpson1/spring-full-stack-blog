@@ -8,8 +8,8 @@ interface CommentsListProps {
 const CommentsList: React.FC<CommentsListProps> = ({ comments }) => {
     return(
         <div>
-            {comments.map(comment => (
-                <p>{comment?.commentText}</p>
+            {comments.map((comment, i) => (
+                <p key={i}>{comment?.commentText}</p>
             ))}
         </div>
     )
