@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import org.hibernate.annotations.CreationTimestamp;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -29,5 +30,9 @@ public class Comment {
 	@ManyToOne
 	@JoinColumn(name = "commenter_id")
 	private User commenter;
+	
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "article_id")
+	private Article article;
 	
 }

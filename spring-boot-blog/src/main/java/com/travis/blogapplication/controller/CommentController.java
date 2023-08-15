@@ -1,15 +1,24 @@
 package com.travis.blogapplication.controller;
 
+import java.util.List;
+import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.travis.blogapplication.dto.CommentDTO;
 import com.travis.blogapplication.model.Article;
 import com.travis.blogapplication.model.Comment;
 import com.travis.blogapplication.service.ArticleService;
 import com.travis.blogapplication.service.CommentService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/comments")
@@ -26,30 +35,33 @@ public class CommentController {
     private ArticleService articleService;
 
     @GetMapping
-    public List<Comment> getAllComments() {
+    public List<CommentDTO> getAllComments() {
         return commentService.getAllComments();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Comment> getCommentById(@PathVariable Long id) {
-        Optional<Comment> comment = commentService.getCommentById(id);
-        return comment.map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
+    public ResponseEntity<CommentDTO> getCommentById(@PathVariable Long id) {
+        CommentDTO comment = commentService.getCommentDTOById(id);
+        if(comment == null) {
+        	return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok().body(comment);
     }
 
     @PostMapping("/article/{articleId}")
-    public ResponseEntity<Comment> createComment(@RequestBody Comment comment, @PathVariable Long articleId) {
+    public ResponseEntity<CommentDTO> createComment(@RequestBody Comment comment, @PathVariable Long articleId) {
         Optional<Article> article = articleService.getArticleById(articleId);
         if (article.isEmpty()) {
             return ResponseEntity.notFound().build();
         }
 
-        Comment createdComment = commentService.createComment(comment, article.get());
+        CommentDTO createdComment = commentService.createComment(comment, article.get());
         return ResponseEntity.ok().body(createdComment);
     }
 
 
     @PutMapping("/{id}")
-    public ResponseEntity<Comment> updateComment(@PathVariable Long id, @RequestBody Comment comment) {
+    public ResponseEntity<CommentDTO> updateComment(@PathVariable Long id, @RequestBody Comment comment) {
         if (!commentService.getCommentById(id).isPresent()) {
             return ResponseEntity.notFound().build();
         }
@@ -63,6 +75,7 @@ public class CommentController {
         if (!comment.isPresent()) {
             return ResponseEntity.notFound().build();
         }
+        comment.get().getArticle().getComments().remove(comment.get());
         commentService.deleteComment(id);
         return ResponseEntity.noContent().build();
     }
