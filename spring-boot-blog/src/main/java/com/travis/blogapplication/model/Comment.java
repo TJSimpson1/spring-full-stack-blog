@@ -1,41 +1,33 @@
 package com.travis.blogapplication.model;
 
-import java.util.List;
+import java.time.LocalDateTime;
 
-import jakarta.persistence.Column;
+import org.hibernate.annotations.CreationTimestamp;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.Data;
 
 @Entity
-@Table(name = "articles")
+@Table(name = "comments")
 @Data
-public class Article {
-
+public class Comment {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
+
+	private String commentText;
 	
-	@Column(unique = true)
-	private String name;
-	
-	private String title;
-	
-	@Lob
-	@Column(length = 10000)
-	private List<String> content;
+	@CreationTimestamp
+    private LocalDateTime timePosted;
 	
 	@ManyToOne
-	@JoinColumn(name = "author_id")
-	private User author;
+	@JoinColumn(name = "commenter_id")
+	private User commenter;
 	
-	@OneToMany
-    private List<Comment> comments;
 }
