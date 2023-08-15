@@ -43,6 +43,7 @@ public class WebSecurityConfig {
 				.requestMatchers("/api/auth/**").permitAll()
 				.requestMatchers("/api/articles/**").permitAll()
 				.requestMatchers("/api/users/**").permitAll()
+				.requestMatchers("/api/comments/**").permitAll()
 				.requestMatchers("/api/management/**")
 				.hasAnyRole(ADMIN.name(), AUTHOR.name())
 				.requestMatchers(GET, "/api/management/**")

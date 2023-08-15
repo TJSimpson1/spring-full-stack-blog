@@ -6,6 +6,8 @@ import { Article } from "../interfaces/Article";
 import { User } from "../interfaces/User";
 import { useUser } from "../hooks/useUser";
 import { useLocalState } from "../hooks/useLocalStorage";
+import CommentsList from "../components/CommentsList";
+import AddCommentForm from "../components/AddCommentForm";
 
 const ArticlePage: React.FC = () => {
   const { articleId } = useParams<{ articleId: string }>();
@@ -13,43 +15,23 @@ const ArticlePage: React.FC = () => {
   const [articleLoading, setArticleLoading] = useState<boolean>(true);
   const { user, isLoading }: { user: User | null; isLoading: boolean } =
     useUser();
-  const [userRole, setUserRole] = useState("");
   const [jwt, setJwt] = useLocalState("", "jwt");
   const navigate = useNavigate();
-
+  
+  const fetchArticle = async () => {
+    try {
+      const response = await axios.get<Article>(
+        `http://localhost:8080/api/articles/${articleId}`
+      );
+      setArticle(response.data);
+      setArticleLoading(false);
+    } catch (error) {
+      console.error("Failed to fetch article", error);
+      setArticleLoading(false);
+    }
+  };
   useEffect(() => {
-    const getUserRole = async () => {
-      if (user) {
-        await axios
-          .get(`http://localhost:8080/api/users/${user.username}/role`, {
-            headers: {
-              Authorization: `Bearer ${jwt.replace(/"/g, "")}`,
-            },
-          })
-          .then((response) => {
-            setUserRole(response.data);
-          })
-          .catch((error) => {
-            console.error("Failed to fetch user's role", error);
-          });
-      }
-    };
-    getUserRole();
-  }, [isLoading]);
-
-  useEffect(() => {
-    const fetchArticle = async () => {
-      try {
-        const response = await axios.get<Article>(
-          `http://localhost:8080/api/articles/${articleId}`
-        );
-        setArticle(response.data);
-        setArticleLoading(false);
-      } catch (error) {
-        console.error("Failed to fetch article", error);
-        setArticleLoading(false);
-      }
-    };
+    
 
     fetchArticle();
   }, [articleId]);
@@ -75,10 +57,13 @@ const ArticlePage: React.FC = () => {
           <div className="article">
             <h1>{article.title}</h1>
             <p>Author: {article.author?.name}</p>
-            {user && (userRole === "ADMIN" || (userRole === "AUTHOR" && user.id === article.author?.id)) && <div><button onClick={deleteArticle}>Delete article</button></div>}
+            {user && (user.role === "ADMIN" || (user.role === "AUTHOR" && user.id === article.author?.id)) && <div><button onClick={deleteArticle}>Delete article</button></div>}
             {article.content.map((paragraph, i) => (
               <p key={i}>{paragraph}</p>
             ))}
+            <h3>Comments:</h3>
+            {user && <AddCommentForm articleId={article.id} user={user} updateArticle={() => fetchArticle()} />}
+            <CommentsList comments={article.comments} />
           </div>
         )
       )}

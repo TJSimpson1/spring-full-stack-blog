@@ -9,6 +9,7 @@ const CreateArticlePage = () => {
         title: "",
         content: [],
         author: null, // Set the author as needed
+        comments: []
       };
 
     return(

@@ -14,20 +14,19 @@ public class UserService {
 
 	@Autowired
 	private UserDAO userRepository;
-	
+
 	public Optional<UserDTO> findUserByUsername(String username) {
 		Optional<User> userOpt = userRepository.findFirstByUsername(username);
-		UserDTO userDTO = new UserDTO();
-		if(userOpt.isEmpty()) {
-			return Optional.of(null);
-		}
-		User user = userOpt.get();
-		userDTO.setId(user.getId());
-		userDTO.setUsername(user.getUsername());
-		userDTO.setEmail(user.getEmail());
-		userDTO.setName(user.getName());
-		userDTO.setRole(user.getRole());
-		return Optional.of(userDTO);
+
+		return userOpt.map(user -> {
+			UserDTO userDTO = new UserDTO();
+			userDTO.setId(user.getId());
+			userDTO.setUsername(user.getUsername());
+			userDTO.setEmail(user.getEmail());
+			userDTO.setName(user.getName());
+			userDTO.setRole(user.getRole());
+			return userDTO;
+		});
 	}
-	
+
 }
