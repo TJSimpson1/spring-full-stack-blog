@@ -49,8 +49,11 @@ public class ArticleService {
     	return articleRepository.save(article);
     }
 
+    public Optional<Article> getArticleById(Long id) {
+        return articleRepository.findById(id);
+    }
     
-    public ArticleDTO getArticleById(Long id) {
+    public ArticleDTO getArticleDTOById(Long id) {
         Optional<Article> article = articleRepository.findById(id);
         if(article.isPresent()) {
         	return convertToDTO(article.get());

@@ -39,7 +39,7 @@ public class ArticleController {
     // Read an article by ID
     @GetMapping("/{id}")
     public ResponseEntity<ArticleDTO> getArticleById(@PathVariable Long id) {
-        ArticleDTO article = articleService.getArticleById(id);
+        ArticleDTO article = articleService.getArticleDTOById(id);
         if(article == null) {
         	return ResponseEntity.notFound().build();
         }
