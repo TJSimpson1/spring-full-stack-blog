@@ -6,6 +6,7 @@ import { Article } from "../interfaces/Article";
 import { User } from "../interfaces/User";
 import { useUser } from "../hooks/useUser";
 import { useLocalState } from "../hooks/useLocalStorage";
+import CommentsList from "../components/CommentsList";
 
 const ArticlePage: React.FC = () => {
   const { articleId } = useParams<{ articleId: string }>();
@@ -79,6 +80,7 @@ const ArticlePage: React.FC = () => {
             {article.content.map((paragraph, i) => (
               <p key={i}>{paragraph}</p>
             ))}
+            <CommentsList comments={article.comments} />
           </div>
         )
       )}
