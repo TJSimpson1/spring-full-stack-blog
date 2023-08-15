@@ -50,8 +50,12 @@ public class ArticleService {
     }
 
     
-    public Optional<Article> getArticleById(Long id) {
-        return articleRepository.findById(id);
+    public ArticleDTO getArticleById(Long id) {
+        Optional<Article> article = articleRepository.findById(id);
+        if(article.isPresent()) {
+        	return convertToDTO(article.get());
+        }
+        return null;
     }
 
     
