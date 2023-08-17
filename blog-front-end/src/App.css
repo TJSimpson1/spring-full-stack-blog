@@ -7,7 +7,7 @@
   list-style-type: none;
   margin: 0;
   padding: 0;
-  background-color: #f2f2f2;
+  background-color: rgb(80, 80, 80);
   display: flex;
 }
 
@@ -19,21 +19,21 @@
   display: block;
   padding: 10px;
   text-decoration: none;
-  color: #333;
+  color: #fff;
 }
 
 .navbar li a:hover {
-  background-color: #ddd;
+  background-color: rgb(100,100,100);
 }
 
 .navbar li.active a {
-  background-color: #ffffff;
+  background-color: rgb(100,100,100);
 }
 
 .footer {
-  background-color: #f2f2f2;
+  background-color: rgb(80, 80, 80);
   padding: 40px 0;
-  color: #666;
+  color: #fff;
 }
 
 .footer-content {
@@ -54,7 +54,7 @@
 }
 
 .social-media a {
-  color: #666;
+  color: #fff;
   font-size: 20px;
   margin-right: 10px;
   transition: color 0.3s ease;
@@ -74,3 +74,15 @@
 }
 
 @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css');
+
+.text-container {
+  max-width: 1000px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  word-wrap: break-word;
+  background-color: rgb(250, 250, 250);
+  color: #333;
+  padding: 5px 20px;
+}

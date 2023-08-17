@@ -6,6 +6,7 @@ import { Article } from "../interfaces/Article";
 import { User } from "../interfaces/User";
 import { useUser } from "../hooks/useUser";
 import { useLocalState } from "../hooks/useLocalStorage";
+import { Link } from "react-router-dom";
 
 const ArticlesListPage = () => {
   const [articles, setArticles] = useState<Article[]>([]);
@@ -39,12 +40,15 @@ const ArticlesListPage = () => {
       ) : (
         <div>
           <h1>Articles</h1>
-          {user && user.role === "AUTHOR" && (
+          {user && (user.role === "AUTHOR" || user.role === "ADMIN") && (
             <div>
               <button onClick={showMyArticles}>Show my articles</button>
               <button onClick={fetchArticles}>Show all articles</button>
+              <Link to="/articles/create-article">Create article</Link>
             </div>
+            
           )}
+          
           <ArticlesList articles={articles} />
         </div>
       )}

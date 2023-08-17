@@ -62,7 +62,7 @@ const ArticlePage: React.FC = () => {
               <p key={i}>{paragraph}</p>
             ))}
             <h3>Comments:</h3>
-            {user && <AddCommentForm articleId={article.id} user={user} updateArticle={() => fetchArticle()} />}
+            {user ? <AddCommentForm articleId={article.id} user={user} updateArticle={() => fetchArticle()} /> : <h5>Log in to comment</h5>}
             <CommentsList comments={article.comments} />
           </div>
         )
