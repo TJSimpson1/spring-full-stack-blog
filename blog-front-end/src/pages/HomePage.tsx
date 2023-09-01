@@ -7,6 +7,11 @@ import styled from "styled-components";
 import HomePageCarousel from "../components/HomePageCarousel";
 import "bootstrap/dist/css/bootstrap.css";
 
+const HomeContent = styled.div`
+  width: 80%;
+  margin: auto;
+`
+
 const InfoBoxContainer = styled.div`
   display: flex;
   justify-content: space-around;
@@ -57,6 +62,8 @@ const HomePage = () => {
           <p>Discover amazing content and connect with a vibrant community.</p>
         </div>
       </header>
+
+      <HomeContent>
 
       <InfoBoxContainer>
         <InfoBox>
@@ -202,6 +209,7 @@ const HomePage = () => {
           Thank you for visiting my website, please take a look around and see what you can do!
         </h3>
       </div>
+      </HomeContent>
     </>
   );
 };
