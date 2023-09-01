@@ -150,3 +150,11 @@
 .homepage-carousel {
   margin-bottom: 20px;
 }
+
+.about-page {
+  width: 60%;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 20pt;
+  margin-bottom: 50pt;
+}

@@ -10,7 +10,7 @@ import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Button";
 import "bootstrap/dist/css/bootstrap.css";
 
-const DivContainer = styled.div`
+const InfoBoxContainer = styled.div`
   display: flex;
   justify-content: space-around;
   background-color: rgb(250, 250, 250);
@@ -61,7 +61,7 @@ const HomePage = () => {
         </div>
       </header>
 
-      <DivContainer>
+      <InfoBoxContainer>
         <InfoBox>
           <img src="/images/mysql_logo.png" alt="MySQL Logo"></img>
           <h2>MySQL</h2>
@@ -101,7 +101,7 @@ const HomePage = () => {
             quality and reducing runtime errors.
           </p>
         </InfoBox>
-      </DivContainer>
+      </InfoBoxContainer>
 
       <div className="text-container">
         <h3>
