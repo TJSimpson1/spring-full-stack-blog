@@ -15,7 +15,7 @@ const CreateArticlePage = () => {
 
     return(
         <>
-        <h1>Create Article</h1>
+        <h1 className="create-article-header">Create Article</h1>
         <ArticleForm article={emptyArticle} />
         </>
     )

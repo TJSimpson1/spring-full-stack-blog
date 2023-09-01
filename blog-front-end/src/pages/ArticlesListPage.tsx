@@ -9,10 +9,32 @@ import { useLocalState } from "../hooks/useLocalStorage";
 import { Link } from "react-router-dom";
 import styled, { css } from "styled-components";
 
+
+const mainColor = "#9000ff"; // Define your main color here
+
 const ArticlesContainer = styled.div`
+  margin: 30px;
+
   button {
     margin: 5px;
   }
+`;
+
+const StyledLink = styled(Link)`
+display: block;
+width: 120px;
+padding: 5px;
+background: #00f;
+text-align: center;
+margin-left: auto;
+text-decoration: none;
+border-radius: 5px;
+color: #fff;
+
+&:hover {
+  background-color: #00b;
+  color: white;
+}
 `;
 
 const FilterArticlesContainer = styled.div`
@@ -34,7 +56,6 @@ const ButtonStyle = css`
   }
 `;
 
-const mainColor = "#9000ff"; // Define your main color here
 
 const ShowAllButton = styled.button<{ isShowingAllArticles: boolean }>`
   ${ButtonStyle}
@@ -112,7 +133,9 @@ const ArticlesListPage = () => {
         <LoadingSpinner />
       ) : (
         <ArticlesContainer>
-          <h1>Articles</h1>
+          {user && (user.role === "AUTHOR" || user.role === "ADMIN") && (
+              <StyledLink to="/articles/create-article">Create article</StyledLink>
+          )}
           {user && (user.role === "AUTHOR" || user.role === "ADMIN") && (
             <FilterArticlesContainer>
             <ShowAllButton
@@ -127,7 +150,6 @@ const ArticlesListPage = () => {
               >
                 Show my articles
               </ShowMyButton>
-              <Link to="/articles/create-article">Create article</Link>
             </FilterArticlesContainer>
           )}
           <ArticlesList articles={articles} />
