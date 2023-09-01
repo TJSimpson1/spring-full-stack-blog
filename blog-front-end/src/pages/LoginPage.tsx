@@ -34,7 +34,7 @@ const LoginContainer = styled.div`
   
   input:focus {
     border-color: #00f; /* Border color when focused (blue in this example) */
-    box-shadow: 0 0 5px rgba(0, 0, 255, 0.5); /* Box shadow when focused */
+    box-shadow: 0 0 10px rgba(0, 0, 255, 0.8); /* Box shadow when focused */
   }
 
   label {
