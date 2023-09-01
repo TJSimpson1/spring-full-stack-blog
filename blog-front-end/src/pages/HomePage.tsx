@@ -5,9 +5,6 @@ import { useUser } from "../hooks/useUser";
 import { User } from "../interfaces/User";
 import styled from "styled-components";
 import HomePageCarousel from "../components/HomePageCarousel";
-import Accordion from "react-bootstrap/Accordion";
-import Card from "react-bootstrap/Card";
-import Button from "react-bootstrap/Button";
 import "bootstrap/dist/css/bootstrap.css";
 
 const InfoBoxContainer = styled.div`

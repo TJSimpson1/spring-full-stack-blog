@@ -8,8 +8,9 @@ const CreateArticlePage = () => {
         name: "",
         title: "",
         content: [],
-        author: null, // Set the author as needed
-        comments: []
+        author: null,
+        comments: [],
+        creationDateTime: new Date()
       };
 
     return(

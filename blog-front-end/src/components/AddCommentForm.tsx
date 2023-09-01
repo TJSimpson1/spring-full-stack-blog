@@ -28,12 +28,13 @@ const AddCommentForm: React.FC<CommentFormProps> = ({ articleId, user, updateArt
   };
 
   return (
-    <div id="add-comment-form">
+    <div className="comment-form">
         <h4>Add a comment</h4>
         {user && <p>You are posting as {user.email}</p>}
         <textarea 
             value={commentText}
             onChange={e => setCommentText(e.target.value)} />
+        <button onClick={() => setCommentText("")}>Cancel</button>
         <button onClick={addComment}>Add comment</button>
     </div>
 )

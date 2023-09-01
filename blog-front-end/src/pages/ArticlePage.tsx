@@ -8,6 +8,19 @@ import { useUser } from "../hooks/useUser";
 import { useLocalState } from "../hooks/useLocalStorage";
 import CommentsList from "../components/CommentsList";
 import AddCommentForm from "../components/AddCommentForm";
+import styled from "styled-components";
+
+const ArticleContainer = styled.div`
+  max-width: 700px;
+  margin: 50px auto;
+  display: flex;
+  justify-content: space-around;
+  padding: 20px;
+`;
+
+const AuthorContainer = styled.p`
+  margin: 50px 0;
+`;
 
 const ArticlePage: React.FC = () => {
   const { articleId } = useParams<{ articleId: string }>();
@@ -17,7 +30,7 @@ const ArticlePage: React.FC = () => {
     useUser();
   const [jwt, setJwt] = useLocalState("", "jwt");
   const navigate = useNavigate();
-  
+
   const fetchArticle = async () => {
     try {
       const response = await axios.get<Article>(
@@ -31,43 +44,75 @@ const ArticlePage: React.FC = () => {
     }
   };
   useEffect(() => {
-    
-
     fetchArticle();
   }, [articleId]);
 
   const deleteArticle = () => {
-    axios.delete(`http://localhost:8080/api/articles/${articleId}/author/${user?.username}`, {
-      headers: {
-        Authorization: `Bearer ${jwt.replace(/"/g, "")}`,
-      },
-    })
-    .then(() => {navigate("/articles")})
-    .catch(error => {
-      console.error("Failed to delete article", error);
-    })
-  }
+    axios
+      .delete(
+        `http://localhost:8080/api/articles/${articleId}/author/${user?.username}`,
+        {
+          headers: {
+            Authorization: `Bearer ${jwt.replace(/"/g, "")}`,
+          },
+        }
+      )
+      .then(() => {
+        navigate("/articles");
+      })
+      .catch((error) => {
+        console.error("Failed to delete article", error);
+      });
+  };
 
   return (
-    <div className="article-page">
+    <ArticleContainer>
       {articleLoading ? (
         <LoadingSpinner />
       ) : (
         article && (
           <div className="article">
             <h1>{article.title}</h1>
-            <p>Author: {article.author?.name}</p>
-            {user && (user.role === "ADMIN" || (user.role === "AUTHOR" && user.id === article.author?.id)) && <div><button onClick={deleteArticle}>Delete article</button></div>}
+            <AuthorContainer>{article?.author && <p>Written by {article.author?.name}</p>}
+            {article?.creationDateTime && (
+              <p>
+                🕓{" "}
+                {new Intl.DateTimeFormat("en-US", {
+                  weekday: "long",
+                  day: "numeric",
+                  month: "long",
+                  year: "numeric",
+                  hour: "numeric",
+                  minute: "numeric",
+                  hour12: false,
+                }).format(new Date(article.creationDateTime))}
+              </p>
+            )}
+            </AuthorContainer>
+            {user &&
+              (user.role === "ADMIN" ||
+                (user.role === "AUTHOR" && user.id === article.author?.id)) && (
+                <div>
+                  <button onClick={deleteArticle}>Delete article</button>
+                </div>
+              )}
             {article.content.map((paragraph, i) => (
               <p key={i}>{paragraph}</p>
             ))}
-            <h3>Comments:</h3>
-            {user ? <AddCommentForm articleId={article.id} user={user} updateArticle={() => fetchArticle()} /> : <h5>Log in to comment</h5>}
+            {user ? (
+              <AddCommentForm
+                articleId={article.id}
+                user={user}
+                updateArticle={() => fetchArticle()}
+              />
+            ) : (
+              <h5>Log in to comment</h5>
+            )}
             <CommentsList comments={article.comments} />
           </div>
         )
       )}
-    </div>
+    </ArticleContainer>
   );
 };
 
