@@ -26,6 +26,7 @@ export function useUser() {
           console.error("Failed to fetch user details:", error);
           setUser(null);
           setIsLoading(false);
+          localStorage.removeItem("jwt");
         });
     } else {
       setUser(null);

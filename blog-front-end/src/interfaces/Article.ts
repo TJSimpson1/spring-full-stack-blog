@@ -8,4 +8,5 @@ export interface Article {
     content: string[];
     author: User | null;
     comments: Comment[];
+    creationDateTime: Date;
     };

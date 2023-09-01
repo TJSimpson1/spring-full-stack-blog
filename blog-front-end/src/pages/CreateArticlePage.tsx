@@ -8,13 +8,14 @@ const CreateArticlePage = () => {
         name: "",
         title: "",
         content: [],
-        author: null, // Set the author as needed
-        comments: []
+        author: null,
+        comments: [],
+        creationDateTime: new Date()
       };
 
     return(
         <>
-        <h1>Create Article</h1>
+        <h1 className="create-article-header">Create Article</h1>
         <ArticleForm article={emptyArticle} />
         </>
     )

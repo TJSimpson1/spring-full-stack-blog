@@ -29,6 +29,7 @@ public class ArticleService {
         articleDTO.setTitle(article.getTitle());
         articleDTO.setContent(article.getContent());
         articleDTO.setAuthor(article.getAuthor());
+        articleDTO.setCreationDateTime(article.getCreationDateTime());
         List<Comment> comments = article.getComments();
         for(Comment comment : comments) {
         	CommentDTO commentDTO = new CommentDTO();
