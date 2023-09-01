@@ -18,8 +18,23 @@ const ArticleContainer = styled.div`
   padding: 20px;
 `;
 
-const AuthorContainer = styled.p`
+const AuthorContainer = styled.div`
   margin: 50px 0;
+`;
+
+const AuthorButtons = styled.div`
+text-align: right;
+`
+
+const DeleteArticleButton = styled.button`
+color: red;
+background: none;
+border: none;
+`;
+
+const EditArticleButton = styled.button`
+background: none;
+border: none;
 `;
 
 const ArticlePage: React.FC = () => {
@@ -72,6 +87,15 @@ const ArticlePage: React.FC = () => {
       ) : (
         article && (
           <div className="article">
+            {user &&
+              (user.role === "ADMIN" ||
+                (user.role === "AUTHOR" && user.id === article.author?.id)) && (
+                <AuthorButtons>
+                  <EditArticleButton>Edit article</EditArticleButton>
+                  <span> | </span>
+                  <DeleteArticleButton onClick={deleteArticle}>Delete article</DeleteArticleButton>
+                </AuthorButtons>
+              )}
             <h1>{article.title}</h1>
             <AuthorContainer>{article?.author && <p>Written by {article.author?.name}</p>}
             {article?.creationDateTime && (
@@ -89,13 +113,6 @@ const ArticlePage: React.FC = () => {
               </p>
             )}
             </AuthorContainer>
-            {user &&
-              (user.role === "ADMIN" ||
-                (user.role === "AUTHOR" && user.id === article.author?.id)) && (
-                <div>
-                  <button onClick={deleteArticle}>Delete article</button>
-                </div>
-              )}
             {article.content.map((paragraph, i) => (
               <p key={i}>{paragraph}</p>
             ))}
