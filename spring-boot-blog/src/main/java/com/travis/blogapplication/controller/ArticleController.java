@@ -101,6 +101,27 @@ public class ArticleController {
         return ResponseEntity.ok().build();
     }
     
+    @PostMapping("/{articleId}/unlike")
+    public ResponseEntity<Void> unlikeArticle(@PathVariable Long articleId, @RequestBody User likingUser) {
+        Optional<Article> articleOptional = articleService.findById(articleId);
+
+        if (articleOptional.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        
+        Article article = articleOptional.get();
+
+        long idToUnlike = likingUser.getId();
+
+        // Remove the user from the userLikes list
+        article.getUserLikes().removeIf(user -> user.getId() == idToUnlike);
+
+        // Save the updated article
+        articleService.updateArticle(articleId, article);
+
+        return ResponseEntity.ok().build();
+    }
+    
     @GetMapping("/{articleId}/userLikes")
     public ResponseEntity<Set<User>> getUserLikes(@PathVariable Long articleId) {
     	Optional<Article> article = articleService.findById(articleId);
