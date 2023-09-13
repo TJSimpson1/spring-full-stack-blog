@@ -20,6 +20,10 @@ const InfoBoxContainer = styled.div`
   margin: 50px 0px;
   border-radius: 8px;
   box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+
+  @media (max-width: 1200px) {
+    display: block;
+  }
 `;
 
 const InfoBox = styled.div`
@@ -28,7 +32,6 @@ const InfoBox = styled.div`
   color: #000;
   border: solid rgb(200, 200, 200) 1px;
   text-align: center;
-  flex: 1;
   margin: 0 10px;
 
   transition: background 0.2s ease-in-out; /* Adding a transition for smooth animation */
@@ -40,6 +43,10 @@ const InfoBox = styled.div`
   img {
     max-height: 150px; /* Limit the image width to the container width */
     width: auto; /* Maintain aspect ratio */
+  }
+
+  @media (max-width: 1200px) {
+    margin: 10px auto; /* Adjust margin for smaller screens */
   }
 `;
 
