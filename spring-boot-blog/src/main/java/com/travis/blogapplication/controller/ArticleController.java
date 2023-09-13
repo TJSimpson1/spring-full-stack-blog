@@ -86,17 +86,19 @@ public class ArticleController {
     
     @PostMapping("/{articleId}/like")
     public ResponseEntity<Void> likeArticle(@PathVariable Long articleId, @RequestBody User likingUser) {
-        Optional<Article> article = articleService.findById(articleId);
+        Optional<Article> articleOptional = articleService.findById(articleId);
 
-        if (article.isEmpty()) {
+        if (articleOptional.isEmpty()) {
             return ResponseEntity.notFound().build();
         }
+        
+        Article article = articleOptional.get();
 
         // Add the user to the userLikes list
-        article.get().getUserLikes().add(likingUser);
+        article.getUserLikes().add(likingUser);
 
         // Save the updated article
-        articleService.updateArticle(articleId, article.get());
+        articleService.updateArticle(articleId, article);
 
         return ResponseEntity.ok().build();
     }
@@ -111,7 +113,7 @@ public class ArticleController {
         
         Article article = articleOptional.get();
 
-        long idToUnlike = likingUser.getId();
+        Long idToUnlike = likingUser.getId();
 
         // Remove the user from the userLikes list
         article.getUserLikes().removeIf(user -> user.getId() == idToUnlike);
