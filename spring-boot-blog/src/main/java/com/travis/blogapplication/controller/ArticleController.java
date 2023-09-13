@@ -2,6 +2,7 @@ package com.travis.blogapplication.controller;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -98,5 +99,16 @@ public class ArticleController {
         articleService.updateArticle(articleId, article.get());
 
         return ResponseEntity.ok().build();
+    }
+    
+    @GetMapping("/{articleId}/userLikes")
+    public ResponseEntity<Set<User>> getUserLikes(@PathVariable Long articleId) {
+    	Optional<Article> article = articleService.findById(articleId);
+
+        if (article.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        
+        return ResponseEntity.ok(article.get().getUserLikes());
     }
 }

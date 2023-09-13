@@ -27,7 +27,6 @@ public class ArticleService {
         articleDTO.setTitle(article.getTitle());
         articleDTO.setContent(article.getContent());
         articleDTO.setAuthor(article.getAuthor());
-        articleDTO.setUserLikes(article.getUserLikes());
         articleDTO.setCreationDateTime(article.getCreationDateTime());
         return articleDTO;
     }
