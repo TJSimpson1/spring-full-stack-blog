@@ -116,24 +116,26 @@ const ArticlePage: React.FC = () => {
       });
   };
 
-  console.log(user);
-  console.log(likedUsers);
-  const userId = user?.id; // Assuming user has an 'id' property
-
-  // Check if userId is in likedUsers
-  if (userId !== undefined) {
-    const isUserLiked = likedUsers.some(
-      (likedUserId) => likedUserId?.id === userId
-    );
-    console.log(isUserLiked);
-  }
-
   const likeArticle = () => {
     const reqBody = {
       id: user?.id,
     };
     axios
       .post(`http://localhost:8080/api/articles/${articleId}/like`, reqBody)
+      .then(() => {
+        fetchUserLikes();
+      })
+      .catch((error) => {
+        console.error("Failed to like article", error);
+      });
+  };
+
+  const unlikeArticle = () => {
+    const reqBody = {
+      id: user?.id,
+    };
+    axios
+      .post(`http://localhost:8080/api/articles/${articleId}/unlike`, reqBody)
       .then(() => {
         fetchUserLikes();
       })
@@ -184,7 +186,7 @@ const ArticlePage: React.FC = () => {
                       {likedUsers.some(
                         (likedUserId) => likedUserId?.id === user?.id
                       ) ? (
-                        <button>Liked</button>
+                        <button onClick={unlikeArticle}>Liked</button>
                       ) : (
                         <button onClick={likeArticle}>Like Article</button>
                       )}
