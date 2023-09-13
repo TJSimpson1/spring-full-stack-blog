@@ -57,10 +57,35 @@ const ButtonStyle = css`
 `;
 
 
-const ShowAllButton = styled.button<{ isShowingAllArticles: boolean }>`
+// const ShowAllButton = styled.button<{ isShowingAllArticles: boolean }>`
+//   ${ButtonStyle}
+//   ${(props) =>
+//     props.isShowingAllArticles
+//       ? css`
+//           background-color: ${mainColor};
+//           color: #fff;
+//           &:hover {
+//             background-color: ${mainColor};
+//           }
+//         `
+//       : css`
+//           background-color: #ccc;
+//           color: #333;
+//           &:hover {
+//             background-color: ${mainColor};
+//             color: #fff;
+//           }
+//         `}
+// `;
+
+interface StyledInputProps {
+  $isShowingAllArticles: boolean;
+}
+
+const ShowAllButton = styled.button<StyledInputProps>`
   ${ButtonStyle}
   ${(props) =>
-    props.isShowingAllArticles
+    props.$isShowingAllArticles
       ? css`
           background-color: ${mainColor};
           color: #fff;
@@ -78,10 +103,10 @@ const ShowAllButton = styled.button<{ isShowingAllArticles: boolean }>`
         `}
 `;
 
-const ShowMyButton = styled.button<{ isShowingAllArticles: boolean }>`
+const ShowMyButton = styled.button<StyledInputProps>`
   ${ButtonStyle}
   ${(props) =>
-    !props.isShowingAllArticles
+    !props.$isShowingAllArticles
       ? css`
           background-color: ${mainColor};
           color: #fff;
@@ -98,11 +123,32 @@ const ShowMyButton = styled.button<{ isShowingAllArticles: boolean }>`
           }
         `}
 `;
+
+// const ShowMyButton = styled.button<{ isShowingAllArticles: boolean }>`
+//   ${ButtonStyle}
+//   ${(props) =>
+//     !props.isShowingAllArticles
+//       ? css`
+//           background-color: ${mainColor};
+//           color: #fff;
+//           &:hover {
+//             background-color: ${mainColor};
+//           }
+//         `
+//       : css`
+//           background-color: #ccc;
+//           color: #333;
+//           &:hover {
+//             background-color: ${mainColor};
+//             color: #fff;
+//           }
+//         `}
+// `;
 
 const ArticlesListPage = () => {
   const [articles, setArticles] = useState<Article[]>([]);
   const [articlesLoading, setArticlesLoading] = useState<boolean>(true);
-  const [isShowingAllArticles, setIsShowingAllArticles] = useState(true);
+  const [isShowingAllArticles, setIsShowingAllArticles] = useState<boolean>(true);
   const { user, isLoading }: { user: User | null; isLoading: boolean } =
     useUser();
 
@@ -140,13 +186,13 @@ const ArticlesListPage = () => {
             <FilterArticlesContainer>
             <ShowAllButton
               onClick={fetchArticles}
-              isShowingAllArticles={isShowingAllArticles}
+              $isShowingAllArticles={isShowingAllArticles}
             >
               Show all articles
             </ShowAllButton>
               <ShowMyButton
                 onClick={showMyArticles}
-                isShowingAllArticles={isShowingAllArticles}
+                $isShowingAllArticles={isShowingAllArticles}
               >
                 Show my articles
               </ShowMyButton>

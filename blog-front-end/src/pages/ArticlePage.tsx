@@ -39,8 +39,10 @@ const ArticlePage: React.FC = () => {
   const { articleId } = useParams<{ articleId: string }>();
   const [article, setArticle] = useState<Article | undefined>();
   const [comments, setComments] = useState([]);
+  const [likedUsers, setLikedUsers] = useState([]);
   const [articleLoading, setArticleLoading] = useState<boolean>(true);
   const [commentsLoading, setCommentsLoading] = useState<boolean>(true);
+  const [likedUsersLoading, setLikedUsersLoading] = useState<boolean>(true);
   const { user, isLoading }: { user: User | null; isLoading: boolean } =
     useUser();
   const [jwt, setJwt] = useLocalState("", "jwt");
@@ -72,8 +74,22 @@ const ArticlePage: React.FC = () => {
     }
   }
 
+  const fetchUserLikes = async () => {
+    try {
+      const res = await axios.get(
+        `http://localhost:8080/api/articles/${articleId}/userLikes`
+      );
+      setLikedUsers(res.data);
+      setLikedUsersLoading(false);
+    } catch (error) {
+      console.log("Failed to load liked users", error);
+      setLikedUsersLoading(false);
+    }
+  }
+
   useEffect(() => {
     fetchArticle();
+    fetchUserLikes();
   }, [articleId]);
 
   useEffect(() => {
@@ -131,6 +147,9 @@ const ArticlePage: React.FC = () => {
                   hour12: false,
                 }).format(new Date(article.creationDateTime))}
               </p>
+            )}
+            {!likedUsersLoading && (
+              <div>Article has {likedUsers.length} likes</div>
             )}
             </AuthorContainer>
             {article.content.map((paragraph, i) => (
