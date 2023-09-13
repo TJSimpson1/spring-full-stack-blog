@@ -9,9 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.travis.blogapplication.dto.ArticleDTO;
-import com.travis.blogapplication.dto.CommentDTO;
 import com.travis.blogapplication.model.Article;
-import com.travis.blogapplication.model.Comment;
 import com.travis.blogapplication.model.User;
 import com.travis.blogapplication.repository.ArticleRepository;
 
@@ -30,15 +28,6 @@ public class ArticleService {
         articleDTO.setContent(article.getContent());
         articleDTO.setAuthor(article.getAuthor());
         articleDTO.setCreationDateTime(article.getCreationDateTime());
-        List<Comment> comments = article.getComments();
-        for(Comment comment : comments) {
-        	CommentDTO commentDTO = new CommentDTO();
-        	commentDTO.setId(comment.getId());
-        	commentDTO.setTimePosted(comment.getTimePosted());
-        	commentDTO.setCommentText(comment.getCommentText());
-        	commentDTO.setCommenter(comment.getCommenter());
-        	articleDTO.getComments().add(commentDTO);
-        }
         return articleDTO;
     }
 

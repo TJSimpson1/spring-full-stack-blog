@@ -13,8 +13,6 @@ import styled from "styled-components";
 const ArticleContainer = styled.div`
   max-width: 700px;
   margin: 50px auto;
-  display: flex;
-  justify-content: space-around;
   padding: 20px;
 `;
 
@@ -40,7 +38,9 @@ border: none;
 const ArticlePage: React.FC = () => {
   const { articleId } = useParams<{ articleId: string }>();
   const [article, setArticle] = useState<Article | undefined>();
+  const [comments, setComments] = useState([]);
   const [articleLoading, setArticleLoading] = useState<boolean>(true);
+  const [commentsLoading, setCommentsLoading] = useState<boolean>(true);
   const { user, isLoading }: { user: User | null; isLoading: boolean } =
     useUser();
   const [jwt, setJwt] = useLocalState("", "jwt");
@@ -58,9 +58,29 @@ const ArticlePage: React.FC = () => {
       setArticleLoading(false);
     }
   };
+
+  const fetchComments = async () => {
+    try {
+      const res = await axios.get(
+        `http://localhost:8080/api/comments/article/${articleId}`
+      );
+      setComments(res.data);
+      setCommentsLoading(false);
+    } catch (error) {
+      console.log("Failed to load comments", error);
+      setCommentsLoading(false);
+    }
+  }
+
   useEffect(() => {
     fetchArticle();
   }, [articleId]);
+
+  useEffect(() => {
+    if (!articleLoading) {
+      fetchComments(); // Fetch comments only when the article has loaded
+    }
+  }, [articleId, articleLoading]);
 
   const deleteArticle = () => {
     axios
@@ -83,7 +103,7 @@ const ArticlePage: React.FC = () => {
   return (
     <ArticleContainer>
       {articleLoading ? (
-        <LoadingSpinner />
+        <LoadingSpinner text="Loading article" />
       ) : (
         article && (
           <div className="article">
@@ -125,7 +145,7 @@ const ArticlePage: React.FC = () => {
             ) : (
               <h5>Log in to comment</h5>
             )}
-            <CommentsList comments={article.comments} />
+            {commentsLoading ? <LoadingSpinner text="Loading comments" /> : <CommentsList comments={comments} />}
           </div>
         )
       )}

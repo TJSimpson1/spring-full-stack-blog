@@ -14,7 +14,7 @@ const AdminRoute: FC<AdminRouteProps> = ({ children } ) => {
 
   if (isLoading) {
     // Render a loading indicator while user data is being fetched
-    return <LoadingSpinner />;
+    return <LoadingSpinner text="Checking user details"/>;
   }
 
   if(!user){

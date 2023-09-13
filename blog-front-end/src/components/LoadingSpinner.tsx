@@ -1,10 +1,15 @@
 import React from 'react';
 import './LoadingSpinner.css';
 
-const LoadingSpinner = () => {
+interface LoadingSpinnerProps {
+  text: string;
+}
+
+const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({ text }) => {
   return (
     <div className="loading-spinner">
       <div className="spinner"></div>
+      <div className="loading-text">{text}</div>
     </div>
   );
 };
