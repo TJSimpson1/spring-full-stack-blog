@@ -21,25 +21,25 @@ const AuthorContainer = styled.div`
 `;
 
 const AuthorButtons = styled.div`
-text-align: right;
-`
+  text-align: right;
+`;
 
 const DeleteArticleButton = styled.button`
-color: red;
-background: none;
-border: none;
+  color: red;
+  background: none;
+  border: none;
 `;
 
 const EditArticleButton = styled.button`
-background: none;
-border: none;
+  background: none;
+  border: none;
 `;
 
 const ArticlePage: React.FC = () => {
   const { articleId } = useParams<{ articleId: string }>();
   const [article, setArticle] = useState<Article | undefined>();
   const [comments, setComments] = useState([]);
-  const [likedUsers, setLikedUsers] = useState([]);
+  const [likedUsers, setLikedUsers] = useState<User[]>([]);
   const [articleLoading, setArticleLoading] = useState<boolean>(true);
   const [commentsLoading, setCommentsLoading] = useState<boolean>(true);
   const [likedUsersLoading, setLikedUsersLoading] = useState<boolean>(true);
@@ -72,7 +72,7 @@ const ArticlePage: React.FC = () => {
       console.log("Failed to load comments", error);
       setCommentsLoading(false);
     }
-  }
+  };
 
   const fetchUserLikes = async () => {
     try {
@@ -85,7 +85,7 @@ const ArticlePage: React.FC = () => {
       console.log("Failed to load liked users", error);
       setLikedUsersLoading(false);
     }
-  }
+  };
 
   useEffect(() => {
     fetchArticle();
@@ -116,6 +116,32 @@ const ArticlePage: React.FC = () => {
       });
   };
 
+  console.log(user);
+  console.log(likedUsers);
+  const userId = user?.id; // Assuming user has an 'id' property
+
+  // Check if userId is in likedUsers
+  if (userId !== undefined) {
+    const isUserLiked = likedUsers.some(
+      (likedUserId) => likedUserId?.id === userId
+    );
+    console.log(isUserLiked);
+  }
+
+  const likeArticle = () => {
+    const reqBody = {
+      id: user?.id,
+    };
+    axios
+      .post(`http://localhost:8080/api/articles/${articleId}/like`, reqBody)
+      .then(() => {
+        fetchUserLikes();
+      })
+      .catch((error) => {
+        console.error("Failed to like article", error);
+      });
+  };
+
   return (
     <ArticleContainer>
       {articleLoading ? (
@@ -129,28 +155,46 @@ const ArticlePage: React.FC = () => {
                 <AuthorButtons>
                   <EditArticleButton>Edit article</EditArticleButton>
                   <span> | </span>
-                  <DeleteArticleButton onClick={deleteArticle}>Delete article</DeleteArticleButton>
+                  <DeleteArticleButton onClick={deleteArticle}>
+                    Delete article
+                  </DeleteArticleButton>
                 </AuthorButtons>
               )}
             <h1>{article.title}</h1>
-            <AuthorContainer>{article?.author && <p>Written by {article.author?.name}</p>}
-            {article?.creationDateTime && (
-              <p>
-                🕓{" "}
-                {new Intl.DateTimeFormat("en-US", {
-                  weekday: "long",
-                  day: "numeric",
-                  month: "long",
-                  year: "numeric",
-                  hour: "numeric",
-                  minute: "numeric",
-                  hour12: false,
-                }).format(new Date(article.creationDateTime))}
-              </p>
-            )}
-            {!likedUsersLoading && (
-              <div>Article has {likedUsers.length} likes</div>
-            )}
+            <AuthorContainer>
+              {article?.author && <p>Written by {article.author?.name}</p>}
+              {article?.creationDateTime && (
+                <p>
+                  🕓{" "}
+                  {new Intl.DateTimeFormat("en-US", {
+                    weekday: "long",
+                    day: "numeric",
+                    month: "long",
+                    year: "numeric",
+                    hour: "numeric",
+                    minute: "numeric",
+                    hour12: false,
+                  }).format(new Date(article.creationDateTime))}
+                </p>
+              )}
+              {!likedUsersLoading && (
+                <div>
+                  {user ? ( // Display like button only if logged in
+                    <div>
+                      {likedUsers.some(
+                        (likedUserId) => likedUserId?.id === user?.id
+                      ) ? (
+                        <button>Liked</button>
+                      ) : (
+                        <button onClick={likeArticle}>Like Article</button>
+                      )}
+                    </div>
+                  ) : (
+                    <button onClick={() => navigate('/login')}>Sign in to like</button>
+                  )}
+                  <div>Article has {likedUsers.length} likes</div>
+                </div>
+              )}
             </AuthorContainer>
             {article.content.map((paragraph, i) => (
               <p key={i}>{paragraph}</p>
@@ -164,7 +208,11 @@ const ArticlePage: React.FC = () => {
             ) : (
               <h5>Log in to comment</h5>
             )}
-            {commentsLoading ? <LoadingSpinner text="Loading comments" /> : <CommentsList comments={comments} />}
+            {commentsLoading ? (
+              <LoadingSpinner text="Loading comments" />
+            ) : (
+              <CommentsList comments={comments} />
+            )}
           </div>
         )
       )}
