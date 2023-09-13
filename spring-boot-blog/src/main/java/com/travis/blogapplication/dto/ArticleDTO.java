@@ -1,7 +1,6 @@
 package com.travis.blogapplication.dto;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 import com.travis.blogapplication.model.User;
@@ -16,7 +15,6 @@ public class ArticleDTO {
     private String title;
     private List<String> content;
     private User author;
-    private List<CommentDTO> comments = new ArrayList<>();
     private LocalDateTime creationDateTime;
 
 }

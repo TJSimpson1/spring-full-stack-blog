@@ -9,7 +9,6 @@ const CreateArticlePage = () => {
         title: "",
         content: [],
         author: null,
-        comments: [],
         creationDateTime: new Date()
       };
 

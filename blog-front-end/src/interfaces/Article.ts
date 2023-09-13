@@ -7,6 +7,5 @@ export interface Article {
     title: string;
     content: string[];
     author: User | null;
-    comments: Comment[];
     creationDateTime: Date;
     };

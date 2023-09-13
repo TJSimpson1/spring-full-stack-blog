@@ -49,6 +49,12 @@ public class CommentController {
         }
         return ResponseEntity.ok().body(comment);
     }
+    
+    @GetMapping("/article/{articleId}")
+    public ResponseEntity<List<CommentDTO>> getCommentsByArticleId(@PathVariable Long articleId) {
+        List<CommentDTO> comments = commentService.getCommentDTOsByArticleId(articleId);
+        return ResponseEntity.ok().body(comments);
+    }
 
     @PostMapping("/article/{articleId}")
     public ResponseEntity<CommentDTO> createComment(@RequestBody Comment comment, @PathVariable Long articleId) {

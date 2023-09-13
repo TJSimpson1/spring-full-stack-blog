@@ -130,7 +130,7 @@ const ArticlesListPage = () => {
   return (
     <>
       {articlesLoading ? (
-        <LoadingSpinner />
+        <LoadingSpinner text="Loading articles" />
       ) : (
         <ArticlesContainer>
           {user && (user.role === "AUTHOR" || user.role === "ADMIN") && (
