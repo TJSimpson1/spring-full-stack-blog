@@ -58,7 +58,7 @@ public class CommentController {
 
     @PostMapping("/article/{articleId}")
     public ResponseEntity<CommentDTO> createComment(@RequestBody Comment comment, @PathVariable Long articleId) {
-        Optional<Article> article = articleService.getArticleById(articleId);
+        Optional<Article> article = articleService.findById(articleId);
         if (article.isEmpty()) {
             return ResponseEntity.notFound().build();
         }
