@@ -39,7 +39,7 @@ public class ArticleService {
     	return articleRepository.save(article);
     }
 
-    public Optional<Article> getArticleById(Long id) {
+    public Optional<Article> findById(Long id) {
         return articleRepository.findById(id);
     }
     
@@ -73,6 +73,7 @@ public class ArticleService {
             article.setName(updatedArticle.getName());
             article.setTitle(updatedArticle.getTitle());
             article.setContent(updatedArticle.getContent());
+            article.setUserLikes(updatedArticle.getUserLikes());
             // Save the updated article
             return articleRepository.save(article);
         }

@@ -3,6 +3,7 @@ package com.travis.blogapplication.model;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -13,6 +14,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.Lob;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.PrePersist;
@@ -40,6 +42,9 @@ public class Article {
 	@ManyToOne
 	@JoinColumn(name = "author_id")
 	private User author;
+	
+	@ManyToMany
+	private Set<User> userLikes;
 	
     private LocalDateTime creationDateTime; // Add LocalDateTime attribute
 
