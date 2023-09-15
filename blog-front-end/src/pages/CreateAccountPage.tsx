@@ -62,6 +62,12 @@ const LoginContainer = styled.div`
   p {
     text-align: center;
   }
+
+  .create-user-error p {
+    margin: 0;
+    color: red;
+    background: green;
+  }
 `;
 const CreateAccountPage = () => {
   const [name, setName] = useState("");
@@ -71,16 +77,56 @@ const CreateAccountPage = () => {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [passwordError, setPasswordError] = useState("");
 
+  const [usernameTaken, setUsernameTaken] = useState(false);
+  const [nameInvalid, setNameInvalid] = useState(false);
+  const [usernameInvalid, setUsernameInvalid] = useState(false);
+  const [emailInvalid, setEmailInvalid] = useState(false);
+  const [passwordInvalid, setPasswordInvalid] = useState(false);
+
   const [jwt, setJwt] = useLocalState("", "jwt");
 
   const sendLoginRequest = () => {
+    // Initialize an array to collect validation errors
+    const validationErrors = [];
+    
+    setPasswordError("");
+    setUsernameTaken(false);
+    setNameInvalid(false);
+    setUsernameInvalid(false);
+    setEmailInvalid(false);
+    setPasswordInvalid(false);
+
     // Check if passwords match
     if (password !== confirmPassword) {
+      validationErrors.push("Passwords do not match");
       setPasswordError("Passwords do not match");
-      return; // Don't proceed with the registration
     }
 
-    setPasswordError("");
+    // Check if the name is empty
+    if (name === "") {
+      setNameInvalid(true);
+      validationErrors.push("Name is required");
+    } 
+
+    if (username === "") {
+        setUsernameInvalid(true);
+        validationErrors.push("Username is required");
+    }
+
+    if (email === "") {
+        setEmailInvalid(true);
+        validationErrors.push("Email is required");
+    }
+
+    if (password.length < 4) {
+        setPasswordInvalid(true);
+        validationErrors.push("Password must be greater than 3 characters");
+    }
+
+    if (validationErrors.length > 0) {
+      return;
+    }
+
 
     const reqBody = {
       name: name,
@@ -112,15 +158,26 @@ const CreateAccountPage = () => {
       })
       .catch((message) => {
         console.log(message);
+        setUsernameTaken(true);
       });
   };
 
+  const usernameBoxShadow = usernameTaken || usernameInvalid
+    ? "0 0 10px rgba(255, 0, 0, 0.8)"
+    : "none";
+
+  const nameBoxShadow = nameInvalid ? "0 0 10px rgba(255, 0, 0, 0.8)" : "none";
+
+  const emailBoxShadow = emailInvalid ? "0 0 10px rgba(255, 0, 0, 0.8)" : "none";
+
+  const passwordBoxShadow = passwordInvalid ? "0 0 10px rgba(255, 0, 0, 0.8)" : "none";
+
   const confirmPasswordBoxShadow =
-  password === confirmPassword && confirmPassword !== ""
-    ? "0 0 10px rgba(0, 255, 0, 0.8)"
-    : password === ""
-    ? "none"
-    : "0 0 10px rgba(255, 0, 0, 0.8)";
+    password === confirmPassword && confirmPassword !== ""
+      ? "0 0 10px rgba(0, 255, 0, 0.8)"
+      : password === ""
+      ? "none"
+      : "0 0 10px rgba(255, 0, 0, 0.8)";
 
   return (
     <Background>
@@ -135,18 +192,29 @@ const CreateAccountPage = () => {
             placeholder="Name"
             value={name}
             onChange={(e) => setName(e.target.value)}
+            style={{ boxShadow: nameBoxShadow }}
           />
         </div>
+        {nameInvalid && (
+          <p style={{ color: "red", margin: 0 }}>Name invalid</p>
+        )}
         <div>
           <label htmlFor="username">Username</label>
           <input
-            type="email"
+            type="username"
             id="username"
             placeholder="Username"
             value={username}
+            style={{ boxShadow: usernameBoxShadow }}
             onChange={(e) => setUsername(e.target.value)}
           />
         </div>
+        {usernameTaken && (
+          <p style={{ color: "red", margin: 0 }}>Username taken</p>
+        )}
+        {usernameInvalid && (
+          <p style={{ color: "red", margin: 0 }}>Username invalid</p>
+        )}
         <div>
           <label htmlFor="email">Email</label>
           <input
@@ -155,8 +223,12 @@ const CreateAccountPage = () => {
             placeholder="Email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
+            style={{ boxShadow: emailBoxShadow }}
           />
         </div>
+        {emailInvalid && (
+          <p style={{ color: "red", margin: 0 }}>Email invalid</p>
+        )}
         <div>
           <label htmlFor="password">Password</label>
           <input
@@ -165,8 +237,12 @@ const CreateAccountPage = () => {
             placeholder="Password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
+            style={{ boxShadow: passwordBoxShadow }}
           />
         </div>
+        {passwordInvalid && (
+          <p style={{ color: "red", margin: 0 }}>Password invalid (must be more than 3 characters)</p>
+        )}
         <div>
           <label htmlFor="confirmPassword">Confirm Password</label>
           <input
