@@ -14,6 +14,7 @@ import PageNotFoundPage from './pages/PageNotFound';
 import ArticlesListPage from './pages/ArticlesListPage';
 import ArticlePage from './pages/ArticlePage';
 import CreateArticlePage from './pages/CreateArticlePage';
+import CreateAccountPage from './pages/CreateAccountPage';
 
 function App() {
   return (
@@ -27,6 +28,7 @@ function App() {
               <Route path="/articles" element={<ArticlesListPage />} />
               <Route path="/article/:articleId" element={<ArticlePage />} />
               <Route path="/login" element={<LoginPage />} />
+              <Route path="/create-account" element={<CreateAccountPage />} />
               <Route path="/admin" element={<AdminRoute >
                                                               <AdminPage />
                                                         </AdminRoute>} />
