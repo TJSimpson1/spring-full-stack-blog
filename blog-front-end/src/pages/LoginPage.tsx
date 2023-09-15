@@ -31,7 +31,7 @@ const LoginContainer = styled.div`
     border: 1px solid #ccc; /* Initial border color */
     box-shadow: none; /* Initial box shadow */
   }
-  
+
   input:focus {
     border-color: #00f; /* Border color when focused (blue in this example) */
     box-shadow: 0 0 10px rgba(0, 0, 255, 0.8); /* Box shadow when focused */
@@ -47,10 +47,14 @@ const LoginContainer = styled.div`
     display: block;
     margin: 30px auto 10px auto;
     border-radius: 10px;
-    background: linear-gradient(to right, rgb(255, 105, 180), rgb(50, 0, 169)); /* Gradient background */
+    background: linear-gradient(
+      to right,
+      rgb(255, 105, 180),
+      rgb(50, 0, 169)
+    ); /* Gradient background */
     color: white; /* Text color */
     border: none; /* Remove border */
-  }  
+  }
 
   hr {
     margin: 50px 0px;
@@ -64,10 +68,30 @@ const LoginContainer = styled.div`
 const LoginPage = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [usernameInvalid, setUsernameInvalid] = useState(false);
+  const [passwordInvalid, setPasswordInvalid] = useState(false);
+  const [invalidLogin, setInvalidLogin] = useState(false);
 
   const [jwt, setJwt] = useLocalState("", "jwt");
 
   const sendLoginRequest = () => {
+    setInvalidLogin(false);
+    setUsernameInvalid(false);
+    setPasswordInvalid(false);
+    let errorCount = 0;
+
+    if (username === "") {
+      setUsernameInvalid(true);
+      errorCount += 1;
+    }
+    if (password === "") {
+      setPasswordInvalid(true);
+      errorCount += 1;
+    }
+    if (errorCount > 0) {
+      return;
+    }
+
     const reqBody = {
       username: username,
       password: password,
@@ -84,6 +108,7 @@ const LoginPage = () => {
         if (res.status === 200) {
           return Promise.all([res.json(), res.headers]);
         } else {
+          setInvalidLogin(true);
           return Promise.reject("Invalid login attempt");
         }
       })
@@ -98,6 +123,14 @@ const LoginPage = () => {
       });
   };
 
+  const usernameBoxShadow = usernameInvalid
+    ? "0 0 10px rgba(255, 0, 0, 0.8)"
+    : "none";
+
+  const passwordBoxShadow = passwordInvalid
+    ? "0 0 10px rgba(255, 0, 0, 0.8)"
+    : "none";
+
   return (
     <Background>
       <LoginContainer>
@@ -111,8 +144,12 @@ const LoginPage = () => {
             placeholder="Username"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
+            style={{ boxShadow: usernameBoxShadow }}
           />
         </div>
+        {usernameInvalid && (
+          <p style={{ color: "red", margin: 0 }}>Please enter your username</p>
+        )}
         <div>
           <label htmlFor="password">Password</label>
           <input
@@ -121,15 +158,23 @@ const LoginPage = () => {
             placeholder="Password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
+            style={{ boxShadow: passwordBoxShadow }}
           />
         </div>
+        {passwordInvalid && (
+          <p style={{ color: "red", margin: 0 }}>Please enter your password</p>
+        )}
         <div>
           <button id="submit" type="button" onClick={() => sendLoginRequest()}>
             Log in
           </button>
         </div>
-        <hr/>
-        <p>Not got an account? <Link to="/create-account">Register here!</Link></p>
+        
+        {invalidLogin && <p style={{ color: "red", margin: 0 }}>Invalid login details</p>}
+        <hr />
+        <p>
+          Not got an account? <Link to="/create-account">Register here!</Link>
+        </p>
       </LoginContainer>
     </Background>
   );

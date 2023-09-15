@@ -88,7 +88,7 @@ const CreateAccountPage = () => {
   const sendLoginRequest = () => {
     // Initialize an array to collect validation errors
     const validationErrors = [];
-    
+
     setPasswordError("");
     setUsernameTaken(false);
     setNameInvalid(false);
@@ -106,27 +106,26 @@ const CreateAccountPage = () => {
     if (name === "") {
       setNameInvalid(true);
       validationErrors.push("Name is required");
-    } 
+    }
 
     if (username === "") {
-        setUsernameInvalid(true);
-        validationErrors.push("Username is required");
+      setUsernameInvalid(true);
+      validationErrors.push("Username is required");
     }
 
     if (email === "") {
-        setEmailInvalid(true);
-        validationErrors.push("Email is required");
+      setEmailInvalid(true);
+      validationErrors.push("Email is required");
     }
 
     if (password.length < 4) {
-        setPasswordInvalid(true);
-        validationErrors.push("Password must be greater than 3 characters");
+      setPasswordInvalid(true);
+      validationErrors.push("Password must be greater than 3 characters");
     }
 
     if (validationErrors.length > 0) {
       return;
     }
-
 
     const reqBody = {
       name: name,
@@ -162,15 +161,18 @@ const CreateAccountPage = () => {
       });
   };
 
-  const usernameBoxShadow = usernameTaken || usernameInvalid
-    ? "0 0 10px rgba(255, 0, 0, 0.8)"
-    : "none";
+  const usernameBoxShadow =
+    usernameTaken || usernameInvalid ? "0 0 10px rgba(255, 0, 0, 0.8)" : "none";
 
   const nameBoxShadow = nameInvalid ? "0 0 10px rgba(255, 0, 0, 0.8)" : "none";
 
-  const emailBoxShadow = emailInvalid ? "0 0 10px rgba(255, 0, 0, 0.8)" : "none";
+  const emailBoxShadow = emailInvalid
+    ? "0 0 10px rgba(255, 0, 0, 0.8)"
+    : "none";
 
-  const passwordBoxShadow = passwordInvalid ? "0 0 10px rgba(255, 0, 0, 0.8)" : "none";
+  const passwordBoxShadow = passwordInvalid
+    ? "0 0 10px rgba(255, 0, 0, 0.8)"
+    : "none";
 
   const confirmPasswordBoxShadow =
     password === confirmPassword && confirmPassword !== ""
@@ -195,9 +197,7 @@ const CreateAccountPage = () => {
             style={{ boxShadow: nameBoxShadow }}
           />
         </div>
-        {nameInvalid && (
-          <p style={{ color: "red", margin: 0 }}>Name invalid</p>
-        )}
+        {nameInvalid && <p style={{ color: "red", margin: 0 }}>Name invalid</p>}
         <div>
           <label htmlFor="username">Username</label>
           <input
@@ -241,7 +241,9 @@ const CreateAccountPage = () => {
           />
         </div>
         {passwordInvalid && (
-          <p style={{ color: "red", margin: 0 }}>Password invalid (must be more than 3 characters)</p>
+          <p style={{ color: "red", margin: 0 }}>
+            Password invalid (must be more than 3 characters)
+          </p>
         )}
         <div>
           <label htmlFor="confirmPassword">Confirm Password</label>
