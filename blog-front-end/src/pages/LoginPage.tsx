@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useLocalState } from "../hooks/useLocalStorage";
 import styled from "styled-components";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const Background = styled.div`
   display: flex;
@@ -73,6 +73,8 @@ const LoginPage = () => {
   const [invalidLogin, setInvalidLogin] = useState(false);
 
   const [jwt, setJwt] = useLocalState("", "jwt");
+  
+  const navigate = useNavigate();
 
   const sendLoginRequest = () => {
     setInvalidLogin(false);
@@ -116,7 +118,7 @@ const LoginPage = () => {
         setJwt(data[0].jwt);
       })
       .then(() => {
-        window.location.href = "/";
+        navigate(-1);
       })
       .catch((message) => {
         console.log(message);

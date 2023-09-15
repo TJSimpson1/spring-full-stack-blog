@@ -46,7 +46,7 @@ const CommentsList: React.FC<CommentsListProps> = ({ comments }) => {
     <div>
       {reversedComments.map((comment, i) => (
         <div key={i}>
-          <span className="commenter">{comment.commenter.name} </span>
+          <span className="commenter">{comment.commenter.username} </span>
           <span className="time-ago">{getTimeAgo(comment.timePosted)}</span>
           <p>{comment?.commentText}</p>
         </div>
