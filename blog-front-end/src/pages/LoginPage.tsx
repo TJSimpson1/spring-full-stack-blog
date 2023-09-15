@@ -5,9 +5,9 @@ import { Link } from "react-router-dom";
 
 const Background = styled.div`
   display: flex;
-  background-image: url("/images/login.png"); /* Set the background image */
+  background-image: url("/images/hero_canarywharf.jpg"); /* Set the background image */
   background-size: cover; /* Cover the entire div */
-  height: 100vh; /* 100% viewport height to fill the entire page */
+  height: 120vh; /* 100% viewport height to fill the entire page */
 `;
 
 const LoginContainer = styled.div`
