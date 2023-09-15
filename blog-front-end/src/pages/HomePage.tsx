@@ -51,15 +51,6 @@ const InfoBox = styled.div`
 `;
 
 const HomePage = () => {
-  const [jwt, setJwt] = useLocalState("", "jwt");
-  const { user, isLoading }: { user: User | null; isLoading: boolean } =
-    useUser();
-
-  if (isLoading) {
-    // Render a loading indicator while user data is being fetched
-    return <LoadingSpinner text="Checking user details"/>;
-  }
-
   return (
     <>
       <header className="hero">

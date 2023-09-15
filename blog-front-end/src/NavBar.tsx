@@ -1,11 +1,10 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { useLocalState } from "./hooks/useLocalStorage";
-import { useState, useEffect } from "react";
 
 const NavBar = () => {
   const [activePage, setActivePage] = useState("home");
-  const [jwt, setJwt] = useLocalState("", "jwt");
+  const [jwt, setJwt] = useState(localStorage.getItem("jwt") || ""); // Initialize jwt from local storage
+
   const location = useLocation();
 
   const handleNavigation = (page: string) => {
@@ -14,8 +13,7 @@ const NavBar = () => {
 
   const logout = () => {
     localStorage.removeItem("jwt");
-    setJwt("");
-    window.location.href = "/";
+    setJwt(""); // Update the jwt state
   };
 
   useEffect(() => {
@@ -47,7 +45,7 @@ const NavBar = () => {
               Log in
             </Link>
           ) : (
-            <Link to="/" onClick={logout}>
+            <Link to="#" onClick={logout}>
               Log out
             </Link>
           )}
