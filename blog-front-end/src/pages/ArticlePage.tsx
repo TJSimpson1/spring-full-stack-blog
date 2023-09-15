@@ -205,7 +205,7 @@ const ArticlePage: React.FC = () => {
               <AddCommentForm
                 articleId={article.id}
                 user={user}
-                updateArticle={() => fetchArticle()}
+                updateArticle={() => fetchComments()}
               />
             ) : (
               <h5>Log in to comment</h5>
