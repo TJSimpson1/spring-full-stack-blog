@@ -206,6 +206,7 @@ const ArticlePage: React.FC = () => {
                 articleId={article.id}
                 user={user}
                 updateArticle={() => fetchComments()}
+                replyingTo={0}
               />
             ) : (
               <h5>Log in to comment</h5>
@@ -213,7 +214,7 @@ const ArticlePage: React.FC = () => {
             {commentsLoading ? (
               <LoadingSpinner text="Loading comments" />
             ) : (
-              <CommentsList comments={comments} />
+              <CommentsList comments={comments} user={user} />
             )}
           </div>
         )

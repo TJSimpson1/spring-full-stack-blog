@@ -7,13 +7,28 @@ interface CommentFormProps {
   articleId: number;
   user: User | null;
   updateArticle: any;
+  replyingTo: number;
 }
 
-const AddCommentForm: React.FC<CommentFormProps> = ({ articleId, user, updateArticle }) => {
+const AddCommentForm: React.FC<CommentFormProps> = ({ articleId, user, updateArticle, replyingTo }) => {
   const [commentText, setCommentText] = useState("");
   const addComment = async (e: React.FormEvent) => {
     e.preventDefault();
-    await axios
+    if(replyingTo > 0){
+      await axios
+      .post(`http://localhost:8080/api/comments/reply/${replyingTo}`, {
+        commentText: commentText,
+        commenter: user
+      })
+      .then(() => {
+        setCommentText('');
+        updateArticle();
+      })
+      .catch((error) => {
+        console.error("Could not post reply", error);
+      });
+    } else {
+      await axios
       .post(`http://localhost:8080/api/comments/article/${articleId}`, {
         commentText: commentText,
         commenter: user
@@ -25,6 +40,8 @@ const AddCommentForm: React.FC<CommentFormProps> = ({ articleId, user, updateArt
       .catch((error) => {
         console.error("Could not post comment", error);
       });
+    }
+    
   };
 
   return (

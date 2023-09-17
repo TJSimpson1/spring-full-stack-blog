@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { Comment } from "../interfaces/Comment";
 import axios from "axios";
 import styled from "styled-components";
+import AddCommentForm from "./AddCommentForm";
+import { User } from "../interfaces/User";
 
 const LoadRepliesButton = styled.button`
   background: none;
@@ -19,11 +21,20 @@ const DownArrowIcon = styled.span`
   margin-right: 5px;
 `;
 
+const ReplyButton = styled.button`
+  background: none;
+  margin: 0;
+  border: none;
+  color: blue;
+  cursor: pointer;
+`;
+
 interface CommentsListProps {
   comments: Comment[];
+  user: User | null;
 }
 
-const CommentsList: React.FC<CommentsListProps> = ({ comments }) => {
+const CommentsList: React.FC<CommentsListProps> = ({ comments, user }) => {
   const getTimeAgo = (timePosted: string) => {
     const currentTime: Date = new Date();
     const postedTime: Date = new Date(timePosted);
@@ -59,6 +70,7 @@ const CommentsList: React.FC<CommentsListProps> = ({ comments }) => {
   };
 
   const [loadedReplies, setLoadedReplies] = useState<number[]>([]);
+  const [replyingTo, setReplyingTo] = useState<number | null>(null); // State to track which comment you are replying to
 
   const loadReplies = async (comment: Comment) => {
     try {
@@ -68,13 +80,11 @@ const CommentsList: React.FC<CommentsListProps> = ({ comments }) => {
         );
         comment.replies = res.data;
       }
-      toggleReplies(comment); // Toggle to show the replies
+      toggleReplies(comment);
     } catch (error) {
       console.log("Failed to load replies", error);
     }
   };
-  
-  
 
   const toggleReplies = (comment: Comment) => {
     if (loadedReplies.includes(comment.id)) {
@@ -89,6 +99,10 @@ const CommentsList: React.FC<CommentsListProps> = ({ comments }) => {
     }
   };
 
+  const startReply = (commentId: number) => {
+    setReplyingTo(commentId);
+  };
+
   const renderComments = (comments: Comment[], level: number = 0) => {
     return (
       <div>
@@ -96,7 +110,8 @@ const CommentsList: React.FC<CommentsListProps> = ({ comments }) => {
           <div key={comment.id} style={{ marginLeft: `${level * 20}px`, marginBottom: `10px` }}>
             <span className="commenter">{comment.commenter.username} </span>
             <span className="time-ago">{getTimeAgo(comment.timePosted)}</span>
-            <p  style={{marginBottom: '0px'}}>{comment?.commentText}</p>
+            <p style={{ marginBottom: '0px' }}>{comment?.commentText}</p>
+            <ReplyButton onClick={() => startReply(comment.id)}>Reply</ReplyButton>
             {comment?.hasReplies && (
               <div>
                 <LoadRepliesButton onClick={() => loadReplies(comment)}>
@@ -108,9 +123,11 @@ const CommentsList: React.FC<CommentsListProps> = ({ comments }) => {
                     : "Show Replies"}
                 </LoadRepliesButton>
                 {loadedReplies.includes(comment.id) && comment.replies &&
-                  // Render replies if they have been loaded
                   renderComments(comment.replies, level + 1)}
               </div>
+            )}
+            {replyingTo === comment.id && (
+              <AddCommentForm articleId={1} user={user} updateArticle={() => {}} replyingTo={comment.id} /> // Props drilling!! Need to use global state
             )}
           </div>
         ))}
