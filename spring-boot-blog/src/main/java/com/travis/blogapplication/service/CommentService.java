@@ -80,4 +80,42 @@ public class CommentService {
 		}
 		return commentDTOs;
 	}
+    
+    public CommentDTO createReply(Comment reply, Long parentCommentId) {
+        Optional<Comment> parentComment = commentRepository.findById(parentCommentId);
+        if (parentComment.isEmpty()) {
+            // Handle the case where the parent comment doesn't exist.
+            return null;
+        }
+
+        reply.setParentComment(parentComment.get());
+        parentComment.get().getChildComments().add(reply);
+        reply.setArticle(parentComment.get().getArticle());
+
+        CommentDTO replyCommentDTO = convertToDTO(commentRepository.save(reply));
+        return replyCommentDTO;
+    }
+	
+	public List<CommentDTO> getBaseCommentDTOsByArticleId(Long articleId) {
+        List<Comment> baseComments = commentRepository.findByArticleIdAndParentCommentIsNull(articleId);
+        List<CommentDTO> baseCommentDTOs = new ArrayList<>();
+
+        for (Comment baseComment : baseComments) {
+            CommentDTO baseCommentDTO = convertToDTO(baseComment);
+            baseCommentDTOs.add(baseCommentDTO);
+        }
+        return baseCommentDTOs;
+    }
+    
+    public List<CommentDTO> getReplyCommentDTOsByParentCommentId(Long parentCommentId) {
+        List<Comment> replyComments = commentRepository.findByParentCommentId(parentCommentId);
+        List<CommentDTO> replyCommentDTOs = new ArrayList<>();
+
+        for (Comment replyComment : replyComments) {
+            CommentDTO replyCommentDTO = convertToDTO(replyComment);
+            replyCommentDTOs.add(replyCommentDTO);
+        }
+        return replyCommentDTOs;
+    }
+
 }

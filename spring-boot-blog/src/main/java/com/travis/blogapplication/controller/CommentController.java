@@ -87,4 +87,30 @@ public class CommentController {
         commentService.deleteComment(id);
         return ResponseEntity.noContent().build();
     }
+    
+    @PostMapping("/reply/{parentCommentId}")
+    public ResponseEntity<CommentDTO> createReply(
+        @RequestBody Comment comment,
+        @PathVariable Long parentCommentId
+    ) {
+        CommentDTO createdReply = commentService.createReply(comment, parentCommentId);
+        if (createdReply == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok().body(createdReply);
+    }
+
+    
+    @GetMapping("/article/{articleId}/base")
+    public ResponseEntity<List<CommentDTO>> getBaseCommentsByArticleId(@PathVariable Long articleId) {
+        List<CommentDTO> baseComments = commentService.getBaseCommentDTOsByArticleId(articleId);
+        return ResponseEntity.ok().body(baseComments);
+    }
+
+    @GetMapping("/{parentCommentId}/replies")
+    public ResponseEntity<List<CommentDTO>> getRepliesByParentCommentId(@PathVariable Long parentCommentId) {
+        List<CommentDTO> replyComments = commentService.getReplyCommentDTOsByParentCommentId(parentCommentId);
+        return ResponseEntity.ok().body(replyComments);
+    }
+
 }
