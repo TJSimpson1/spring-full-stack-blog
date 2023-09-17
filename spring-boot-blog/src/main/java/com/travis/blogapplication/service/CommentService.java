@@ -28,6 +28,7 @@ public class CommentService {
 		commentDTO.setCommentText(comment.getCommentText());
 		commentDTO.setTimePosted(comment.getTimePosted());
 		commentDTO.setCommenter(comment.getCommenter());
+		commentDTO.setHasReplies(comment.isHasReplies());
 		return commentDTO;
 	}
 
@@ -90,6 +91,7 @@ public class CommentService {
 
         reply.setParentComment(parentComment.get());
         parentComment.get().getChildComments().add(reply);
+        parentComment.get().setHasReplies(true);
         reply.setArticle(parentComment.get().getArticle());
 
         CommentDTO replyCommentDTO = convertToDTO(commentRepository.save(reply));

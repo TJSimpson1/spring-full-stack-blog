@@ -44,5 +44,7 @@ public class Comment {
 
     @OneToMany(mappedBy = "parentComment", cascade = CascadeType.ALL)
     private List<Comment> childComments;
+    
+    private boolean hasReplies;
 	
 }

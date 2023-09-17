@@ -64,7 +64,7 @@ const ArticlePage: React.FC = () => {
   const fetchComments = async () => {
     try {
       const res = await axios.get(
-        `http://localhost:8080/api/comments/article/${articleId}`
+        `http://localhost:8080/api/comments/article/${articleId}/base`
       );
       setComments(res.data);
       setCommentsLoading(false);
