@@ -24,17 +24,22 @@ const DownArrowIcon = styled.span`
 const ReplyButton = styled.button`
   background: none;
   margin: 0;
+  font-size: 12px;
   border: none;
-  color: blue;
   cursor: pointer;
 `;
 
 interface CommentsListProps {
   comments: Comment[];
+  setComments: any;
   user: User | null;
 }
 
-const CommentsList: React.FC<CommentsListProps> = ({ comments, user }) => {
+const CommentsList: React.FC<CommentsListProps> = ({
+  comments,
+  setComments,
+  user,
+}) => {
   const getTimeAgo = (timePosted: string) => {
     const currentTime: Date = new Date();
     const postedTime: Date = new Date(timePosted);
@@ -72,6 +77,38 @@ const CommentsList: React.FC<CommentsListProps> = ({ comments, user }) => {
   const [loadedReplies, setLoadedReplies] = useState<number[]>([]);
   const [replyingTo, setReplyingTo] = useState<number | null>(null); // State to track which comment you are replying to
 
+  const reloadReplies = async (comment: Comment) => {
+    try {
+      const res = await axios.get(
+        `http://localhost:8080/api/comments/${comment.id}/replies`
+      );
+      comment.replies = res.data;
+
+      const newReplyIndex = comments.findIndex(
+        (loadedComment) => comment.id === loadedComment.id
+      );
+
+      if (newReplyIndex !== -1) {
+        const updatedComments = [...comments];
+        const newReply = updatedComments[newReplyIndex];
+
+        if (newReply) {
+          newReply.hasReplies = true;
+        }
+
+        // Update the state with the new comments array
+        setComments(updatedComments);
+      }
+
+      setLoadedReplies((prevLoadedReplies) => [
+        ...prevLoadedReplies,
+        comment.id,
+      ]);
+    } catch (error) {
+      console.log("Failed to load replies", error);
+    }
+  };
+
   const loadReplies = async (comment: Comment) => {
     try {
       if (!comment.replies) {
@@ -103,15 +140,40 @@ const CommentsList: React.FC<CommentsListProps> = ({ comments, user }) => {
     setReplyingTo(commentId);
   };
 
+  const cancelReply = () => {
+    setReplyingTo(null); // Reset the state to hide the "Add Comment" form
+  };
+
   const renderComments = (comments: Comment[], level: number = 0) => {
     return (
       <div>
         {comments.map((comment, i) => (
-          <div key={comment.id} style={{ marginLeft: `${level * 20}px`, marginBottom: `10px` }}>
+          <div
+            key={comment.id}
+            style={{ marginLeft: `${level * 20}px`, marginBottom: `10px` }}
+          >
             <span className="commenter">{comment.commenter.username} </span>
             <span className="time-ago">{getTimeAgo(comment.timePosted)}</span>
-            <p style={{ marginBottom: '0px' }}>{comment?.commentText}</p>
-            <ReplyButton onClick={() => startReply(comment.id)}>Reply</ReplyButton>
+            <p style={{ marginBottom: "0px" }}>{comment?.commentText}</p>
+            {user && (
+              <div>
+                <ReplyButton onClick={() => startReply(comment.id)}>
+                  Reply
+                </ReplyButton>
+                {replyingTo === comment.id && (
+                  <AddCommentForm
+                    articleId={1}
+                    user={user} // Props drilling!! Need to use global state
+                    updateComments={() => {
+                      reloadReplies(comment);
+                    }}
+                    replyingTo={comment.id}
+                    onCancel={cancelReply}
+                  /> 
+                )}
+              </div>
+            )}
+
             {comment?.hasReplies && (
               <div>
                 <LoadRepliesButton onClick={() => loadReplies(comment)}>
@@ -122,12 +184,10 @@ const CommentsList: React.FC<CommentsListProps> = ({ comments, user }) => {
                     ? "Hide Replies"
                     : "Show Replies"}
                 </LoadRepliesButton>
-                {loadedReplies.includes(comment.id) && comment.replies &&
+                {loadedReplies.includes(comment.id) &&
+                  comment.replies &&
                   renderComments(comment.replies, level + 1)}
               </div>
-            )}
-            {replyingTo === comment.id && (
-              <AddCommentForm articleId={1} user={user} updateArticle={() => {}} replyingTo={comment.id} /> // Props drilling!! Need to use global state
             )}
           </div>
         ))}

@@ -202,19 +202,24 @@ const ArticlePage: React.FC = () => {
               <p key={i}>{paragraph}</p>
             ))}
             {user ? (
+              <div>
+              <h4>Add a comment</h4>
+              <p>You are posting as {user.username}</p>
               <AddCommentForm
                 articleId={article.id}
                 user={user}
-                updateArticle={() => fetchComments()}
+                updateComments={() => fetchComments()}
                 replyingTo={0}
+                onCancel={() => {}}
               />
+              </div>
             ) : (
               <h5>Log in to comment</h5>
             )}
             {commentsLoading ? (
               <LoadingSpinner text="Loading comments" />
             ) : (
-              <CommentsList comments={comments} user={user} />
+              <CommentsList comments={comments} setComments={setComments} user={user} />
             )}
           </div>
         )
