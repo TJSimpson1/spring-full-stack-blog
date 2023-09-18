@@ -182,7 +182,7 @@ const ArticlePage: React.FC = () => {
               {!likedUsersLoading && (
                 <div>
                   {user ? ( // Display like button only if logged in
-                    <div>
+                    <>
                       {likedUsers.some(
                         (likedUserId) => likedUserId?.id === user?.id
                       ) ? (
@@ -190,11 +190,11 @@ const ArticlePage: React.FC = () => {
                       ) : (
                         <button onClick={likeArticle}>Like Article</button>
                       )}
-                    </div>
+                    </>
                   ) : (
                     <button onClick={() => navigate('/login')}>Sign in to like</button>
                   )}
-                  <div>Article has {likedUsers.length} likes</div>
+                  <span> {likedUsers.length} like{likedUsers.length !== 1 ? <span>s</span> : <span></span>}</span>
                 </div>
               )}
             </AuthorContainer>
