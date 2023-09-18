@@ -55,9 +55,10 @@ const SubmitButton = styled.button`
 
 interface ArticleFormProps {
   article: Article;
+  onSubmit: (formData: Article) => void;
 }
 
-const ArticleForm: React.FC<ArticleFormProps> = ({ article }) => {
+const ArticleForm: React.FC<ArticleFormProps> = ({ article, onSubmit }) => {
   const { user, isLoading }: { user: User | null; isLoading: boolean } =
   useUser();
   const navigate = useNavigate();
@@ -92,14 +93,7 @@ const ArticleForm: React.FC<ArticleFormProps> = ({ article }) => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    axios.post("http://localhost:8080/api/articles", formData)
-    .then(() => {
-        navigate("/articles")
-    })
-    .catch(error => {
-        console.error("Could not create article", error)
-    })
-    console.log(formData);
+    onSubmit(formData);
   };
 
   return (
