@@ -66,7 +66,7 @@ public class ArticleController {
     public ResponseEntity<Article> updateArticle(@PathVariable Long id, @RequestBody Article article) {
         Article updatedArticle = articleService.updateArticle(id, article);
         if (updatedArticle != null) {
-            return ResponseEntity.ok(updatedArticle);
+            return ResponseEntity.ok().build();
         } else {
             return ResponseEntity.notFound().build();
         }

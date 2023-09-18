@@ -41,7 +41,7 @@ const LikeButton = styled.button`
   border-radius: 15px;
   transition: background-color 0.1s;
   &:hover {
-  background-color: #ddd; /* Change the color to your desired filled-in color on hover */
+  background-color: #ddd;
 }
 `
 
@@ -165,7 +165,7 @@ const ArticlePage: React.FC = () => {
               (user.role === "ADMIN" ||
                 (user.role === "AUTHOR" && user.id === article.author?.id)) && (
                 <AuthorButtons>
-                  <EditArticleButton>Edit article</EditArticleButton>
+                  <EditArticleButton onClick={() => navigate(`/articles/update-article/${articleId}`)}>Edit article</EditArticleButton>
                   <span> | </span>
                   <DeleteArticleButton onClick={deleteArticle}>
                     Delete article
