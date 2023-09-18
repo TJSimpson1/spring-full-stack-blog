@@ -35,6 +35,16 @@ const EditArticleButton = styled.button`
   border: none;
 `;
 
+const LikeButton = styled.button`
+  background: none;
+  border: none;
+  border-radius: 15px;
+  transition: background-color 0.1s;
+  &:hover {
+  background-color: #ddd; /* Change the color to your desired filled-in color on hover */
+}
+`
+
 const ArticlePage: React.FC = () => {
   const { articleId } = useParams<{ articleId: string }>();
   const [article, setArticle] = useState<Article | undefined>();
@@ -64,7 +74,7 @@ const ArticlePage: React.FC = () => {
   const fetchComments = async () => {
     try {
       const res = await axios.get(
-        `http://localhost:8080/api/comments/article/${articleId}`
+        `http://localhost:8080/api/comments/article/${articleId}/base`
       );
       setComments(res.data);
       setCommentsLoading(false);
@@ -182,19 +192,29 @@ const ArticlePage: React.FC = () => {
               {!likedUsersLoading && (
                 <div>
                   {user ? ( // Display like button only if logged in
-                    <div>
+                    <>
                       {likedUsers.some(
                         (likedUserId) => likedUserId?.id === user?.id
                       ) ? (
-                        <button onClick={unlikeArticle}>Liked</button>
+                        <LikeButton onClick={unlikeArticle}>
+                          <i className="fas fa-thumbs-up"></i>
+                        </LikeButton>
                       ) : (
-                        <button onClick={likeArticle}>Like Article</button>
+                        <LikeButton onClick={likeArticle}>
+                          <i className="far fa-thumbs-up"></i>
+                        </LikeButton>
                       )}
-                    </div>
+                    </>
                   ) : (
-                    <button onClick={() => navigate('/login')}>Sign in to like</button>
+                    <LikeButton onClick={() => navigate("/login")}>
+                      <i className="far fa-thumbs-up"></i> Sign in to like
+                    </LikeButton>
                   )}
-                  <div>Article has {likedUsers.length} likes</div>
+                  <span>
+                    {" "}
+                    {likedUsers.length} like
+                    {likedUsers.length !== 1 ? <span>s</span> : <span></span>}
+                  </span>
                 </div>
               )}
             </AuthorContainer>
@@ -202,18 +222,28 @@ const ArticlePage: React.FC = () => {
               <p key={i}>{paragraph}</p>
             ))}
             {user ? (
-              <AddCommentForm
-                articleId={article.id}
-                user={user}
-                updateArticle={() => fetchComments()}
-              />
+              <div>
+                <h4>Add a comment</h4>
+                <p>You are posting as {user.username}</p>
+                <AddCommentForm
+                  articleId={article.id}
+                  user={user}
+                  updateComments={() => fetchComments()}
+                  replyingTo={0}
+                  onCancel={() => {}}
+                />
+              </div>
             ) : (
               <h5>Log in to comment</h5>
             )}
             {commentsLoading ? (
               <LoadingSpinner text="Loading comments" />
             ) : (
-              <CommentsList comments={comments} />
+              <CommentsList
+                comments={comments}
+                setComments={setComments}
+                user={user}
+              />
             )}
           </div>
         )

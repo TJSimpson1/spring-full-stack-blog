@@ -6,35 +6,58 @@ import axios from "axios";
 interface CommentFormProps {
   articleId: number;
   user: User | null;
-  updateArticle: any;
+  updateComments: any;
+  replyingTo: number;
+  onCancel: any;
 }
 
-const AddCommentForm: React.FC<CommentFormProps> = ({ articleId, user, updateArticle }) => {
+const AddCommentForm: React.FC<CommentFormProps> = ({ articleId, user, updateComments, replyingTo, onCancel }) => {
   const [commentText, setCommentText] = useState("");
   const addComment = async (e: React.FormEvent) => {
     e.preventDefault();
-    await axios
+    if(replyingTo > 0){
+      await axios
+      .post(`http://localhost:8080/api/comments/reply/${replyingTo}`, {
+        commentText: commentText,
+        commenter: user
+      })
+      .then(() => {
+        setCommentText('');
+        updateComments();
+        onCancel();
+      })
+      .catch((error) => {
+        console.error("Could not post reply", error);
+      });
+    } else {
+      await axios
       .post(`http://localhost:8080/api/comments/article/${articleId}`, {
         commentText: commentText,
         commenter: user
       })
       .then(() => {
         setCommentText('');
-        updateArticle();
+        updateComments();
       })
       .catch((error) => {
         console.error("Could not post comment", error);
       });
+    }
   };
+
+  const cancelComment = () => {
+    if(replyingTo !== 0){
+      onCancel();
+    }
+    setCommentText("");
+  }
 
   return (
     <div className="comment-form">
-        <h4>Add a comment</h4>
-        {user && <p>You are posting as {user.username}</p>}
         <textarea 
             value={commentText}
             onChange={e => setCommentText(e.target.value)} />
-        <button onClick={() => setCommentText("")}>Cancel</button>
+        <button onClick={cancelComment}>Cancel</button>
         <button onClick={addComment}>Add comment</button>
     </div>
 )

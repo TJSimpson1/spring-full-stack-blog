@@ -13,5 +13,6 @@ public class CommentDTO {
 	private String commentText;
 	private LocalDateTime timePosted;
 	private User commenter;
+	private boolean hasReplies;
 
 }

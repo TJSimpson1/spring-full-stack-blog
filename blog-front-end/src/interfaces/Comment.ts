@@ -5,4 +5,6 @@ export interface Comment {
   commentText: string;
   timePosted: string; // Change this to string for ISO 8601 datetime
   commenter: User;
+  hasReplies: boolean;
+  replies: Comment[];
 }
