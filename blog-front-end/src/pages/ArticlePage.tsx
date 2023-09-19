@@ -178,7 +178,7 @@ const ArticlePage: React.FC = () => {
               {article?.creationDateTime && (
                 <p>
                   🕓{" "}
-                  {new Intl.DateTimeFormat("en-US", {
+                  {new Intl.DateTimeFormat("en-UK", {
                     weekday: "long",
                     day: "numeric",
                     month: "long",
