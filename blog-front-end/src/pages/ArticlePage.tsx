@@ -4,6 +4,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import LoadingSpinner from "../components/LoadingSpinner";
 import { Article } from "../interfaces/Article";
 import { User } from "../interfaces/User";
+import { Comment } from "../interfaces/Comment";
 import { useUser } from "../hooks/useUser";
 import { useLocalState } from "../hooks/useLocalStorage";
 import CommentsList from "../components/CommentsList";
@@ -41,14 +42,16 @@ const LikeButton = styled.button`
   border-radius: 15px;
   transition: background-color 0.1s;
   &:hover {
-  background-color: #ddd;
-}
-`
+    background-color: #ddd;
+  }
+`;
 
 const ArticlePage: React.FC = () => {
   const { articleId } = useParams<{ articleId: string }>();
   const [article, setArticle] = useState<Article | undefined>();
-  const [comments, setComments] = useState([]);
+  const [comments, setComments] = useState<Comment[]>([]);
+  const [page, setPage] = useState<number>(0);
+  const [hasMore, setHasMore] = useState<boolean>(true);
   const [likedUsers, setLikedUsers] = useState<User[]>([]);
   const [articleLoading, setArticleLoading] = useState<boolean>(true);
   const [commentsLoading, setCommentsLoading] = useState<boolean>(true);
@@ -73,14 +76,22 @@ const ArticlePage: React.FC = () => {
 
   const fetchComments = async () => {
     try {
-      const res = await axios.get(
-        `http://localhost:8080/api/comments/article/${articleId}/base`
+      const response = await axios.get(
+        `http://localhost:8080/api/comments/article/${articleId}/base?page=${page}`
       );
-      setComments(res.data);
+      const newComments = response.data.content;
+      setComments((prevComments) => [...prevComments, ...newComments]);
+      setHasMore(!response.data.last);
       setCommentsLoading(false);
     } catch (error) {
-      console.log("Failed to load comments", error);
+      console.error("Failed to load comments", error);
       setCommentsLoading(false);
+    }
+  };
+
+  const loadMoreComments = () => {
+    if (hasMore) {
+      setPage((prevPage) => prevPage + 1);
     }
   };
 
@@ -106,7 +117,7 @@ const ArticlePage: React.FC = () => {
     if (!articleLoading) {
       fetchComments(); // Fetch comments only when the article has loaded
     }
-  }, [articleId, articleLoading]);
+  }, [articleId, articleLoading, page]);
 
   const deleteArticle = () => {
     axios
@@ -165,7 +176,13 @@ const ArticlePage: React.FC = () => {
               (user.role === "ADMIN" ||
                 (user.role === "AUTHOR" && user.id === article.author?.id)) && (
                 <AuthorButtons>
-                  <EditArticleButton onClick={() => navigate(`/articles/update-article/${articleId}`)}>Edit article</EditArticleButton>
+                  <EditArticleButton
+                    onClick={() =>
+                      navigate(`/articles/update-article/${articleId}`)
+                    }
+                  >
+                    Edit article
+                  </EditArticleButton>
                   <span> | </span>
                   <DeleteArticleButton onClick={deleteArticle}>
                     Delete article
@@ -207,7 +224,7 @@ const ArticlePage: React.FC = () => {
                     </>
                   ) : (
                     <LikeButton onClick={() => navigate("/login")}>
-                      <i className="far fa-thumbs-up"></i> Sign in to like
+                      <i className="far fa-thumbs-up"></i>
                     </LikeButton>
                   )}
                   <span>
@@ -228,7 +245,9 @@ const ArticlePage: React.FC = () => {
                 <AddCommentForm
                   articleId={article.id}
                   user={user}
-                  updateComments={() => fetchComments()}
+                  updateComments={(newComment: Comment) => {
+                    setComments((prevComments) => [...prevComments, newComment]);
+                  }}
                   replyingTo={0}
                   onCancel={() => {}}
                 />
@@ -245,6 +264,7 @@ const ArticlePage: React.FC = () => {
                 user={user}
               />
             )}
+            {hasMore && <button onClick={loadMoreComments}>Load More</button>}
           </div>
         )
       )}

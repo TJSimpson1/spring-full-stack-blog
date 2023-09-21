@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.travis.blogapplication.dto.CommentDTO;
@@ -118,6 +120,12 @@ public class CommentService {
             replyCommentDTOs.add(replyCommentDTO);
         }
         return replyCommentDTOs;
+    }
+
+    public Page<CommentDTO> getBaseCommentDTOsByArticleId(Long articleId, Pageable pageable) {
+        Page<Comment> baseCommentsPage = commentRepository.findByArticleIdAndParentCommentIsNull(articleId, pageable);
+        Page<CommentDTO> baseCommentDTOsPage = baseCommentsPage.map(this::convertToDTO);
+        return baseCommentDTOsPage;
     }
 
 }

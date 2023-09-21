@@ -40,7 +40,7 @@ const NavBar = () => {
           </Link>
         </li>
         <li className={activePage === "login" ? "active nav-right" : "nav-right"}>
-          {jwt === "" ? (
+          {!jwt || jwt === "\"\"" ? (
             <Link to="/login" onClick={() => handleNavigation("login")}>
               Log in
             </Link>

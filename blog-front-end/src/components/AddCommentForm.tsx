@@ -21,9 +21,10 @@ const AddCommentForm: React.FC<CommentFormProps> = ({ articleId, user, updateCom
         commentText: commentText,
         commenter: user
       })
-      .then(() => {
+      .then((res) => {
+        const newComment = res.data;
         setCommentText('');
-        updateComments();
+        updateComments(newComment);
         onCancel();
       })
       .catch((error) => {
@@ -35,9 +36,10 @@ const AddCommentForm: React.FC<CommentFormProps> = ({ articleId, user, updateCom
         commentText: commentText,
         commenter: user
       })
-      .then(() => {
+      .then((res) => {
+        const newComment = res.data;
         setCommentText('');
-        updateComments();
+        updateComments(newComment);
       })
       .catch((error) => {
         console.error("Could not post comment", error);

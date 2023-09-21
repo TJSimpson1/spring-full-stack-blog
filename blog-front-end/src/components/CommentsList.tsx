@@ -77,6 +77,8 @@ const CommentsList: React.FC<CommentsListProps> = ({
   const [loadedReplies, setLoadedReplies] = useState<number[]>([]);
   const [replyingTo, setReplyingTo] = useState<number | null>(null); // State to track which comment you are replying to
 
+  console.log(comments);
+
   const reloadReplies = async (comment: Comment) => {
     try {
       const res = await axios.get(

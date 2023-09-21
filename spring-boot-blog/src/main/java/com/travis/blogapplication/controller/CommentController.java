@@ -4,6 +4,10 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -13,6 +17,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.travis.blogapplication.dto.CommentDTO;
@@ -101,11 +106,24 @@ public class CommentController {
     }
 
     
+//    @GetMapping("/article/{articleId}/base")
+//    public ResponseEntity<List<CommentDTO>> getBaseCommentsByArticleId(@PathVariable Long articleId) {
+//        List<CommentDTO> baseComments = commentService.getBaseCommentDTOsByArticleId(articleId);
+//        return ResponseEntity.ok().body(baseComments);
+//    }
+    
     @GetMapping("/article/{articleId}/base")
-    public ResponseEntity<List<CommentDTO>> getBaseCommentsByArticleId(@PathVariable Long articleId) {
-        List<CommentDTO> baseComments = commentService.getBaseCommentDTOsByArticleId(articleId);
-        return ResponseEntity.ok().body(baseComments);
+    public ResponseEntity<Page<CommentDTO>> getBaseCommentsByArticleId(
+        @PathVariable Long articleId,
+        @RequestParam(defaultValue = "0") int page,
+        @RequestParam(defaultValue = "10") int size
+    ) {
+    	Pageable pageable = PageRequest.of(page, size);
+        Page<CommentDTO> comments = commentService.getBaseCommentDTOsByArticleId(articleId, pageable);
+
+        return ResponseEntity.ok(comments);
     }
+
 
     @GetMapping("/{parentCommentId}/replies")
     public ResponseEntity<List<CommentDTO>> getRepliesByParentCommentId(@PathVariable Long parentCommentId) {
